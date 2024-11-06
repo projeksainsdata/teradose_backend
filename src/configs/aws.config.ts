@@ -10,7 +10,7 @@ export default registerAs(
         s3: {
             bucket: process.env.AWS_S3_BUCKET ?? 'nests3',
             region: process.env.AWS_S3_REGION,
-            baseUrl: `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_S3_REGION}.amazonaws.com`,
+            baseUrl: `https://${process.env.AWS_S3_BUCKET}.s3.amazonaws.com`,
         },
     })
 );
