@@ -28,6 +28,12 @@ export interface IPaginationFilterStringContainOptions {
     fullMatch?: boolean;
 }
 
+export interface IPaginationJoinSearchOptions {
+    field: string; // Field to search in joined table
+    table: string; // Joined table name
+    searchField: string; // Search field name in request
+}
+
 export interface IPaginationFilterStringEqualOptions
     extends IPaginationFilterStringContainOptions {
     isNumber?: boolean;

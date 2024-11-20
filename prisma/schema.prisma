@@ -232,7 +232,7 @@ model Repositories {
 
   thumbnail String @db.VarChar(255)
 
-  description        String  @db.Text
+  description        String?  @db.Text
   indication         String? @db.VarChar(255)
   composition        String? @db.VarChar(255)
   dose               String? @db.VarChar(255)

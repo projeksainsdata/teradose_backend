@@ -15,6 +15,8 @@ import { PaginationOrderPipe } from 'src/common/pagination/pipes/pagination.orde
 import { PaginationPagingPipe } from 'src/common/pagination/pipes/pagination.paging.pipe';
 import { PaginationSearchPipe } from 'src/common/pagination/pipes/pagination.search.pipe';
 import { PaginationFilterEqualBooleanPipe } from '../pipes/pagination.filter-boolean.pipe';
+import { IPaginationJoinSearchOptions } from '../interfaces/pagination.interface';
+import { PaginationJoinSearchPipe } from '../pipes/pagination.join-search.pipe';
 
 export function PaginationQuery(
     defaultPerPage: number,
@@ -87,4 +89,10 @@ export function PaginationQueryFilterEqualObjectId(
 
 export function PaginationQueryBoolean(field: string): ParameterDecorator {
     return Query(field, PaginationFilterEqualBooleanPipe);
+}
+
+export function PaginationQueryJoinSearch(
+    options: IPaginationJoinSearchOptions[]
+): ParameterDecorator {
+    return Query(PaginationJoinSearchPipe(options));
 }

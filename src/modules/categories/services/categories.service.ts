@@ -30,7 +30,14 @@ export class CategoriesServices implements ICategoriesService {
 
         return !!check;
     }
+    async existById(id: string, options?: any): Promise<boolean> {
+        const check = await this.prismaServices.categories.findFirst({
+            where: { id },
+            ...options,
+        });
 
+        return !!check;
+    }
     async findAll(
         find?: Record<string, any>,
         options?: any
