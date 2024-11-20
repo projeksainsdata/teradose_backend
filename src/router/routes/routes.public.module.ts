@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from 'src/common/auth/auth.module';
+import { AwsModule } from 'src/common/aws/aws.module';
+import { AwsS3Controller } from 'src/common/aws/controllers/aws.controller';
 import { CategoriesModule } from 'src/modules/categories/categories.module';
 import { CategoriesPublicController } from 'src/modules/categories/controllers/categories.public.controller';
 import { RepositoriesPublicController } from 'src/modules/repositories/controllers/repositories.public.controller';
@@ -13,6 +15,7 @@ import { UserModule } from 'src/modules/user/user.module';
         UserPublicController,
         CategoriesPublicController,
         RepositoriesPublicController,
+        AwsS3Controller,
     ],
     providers: [],
     exports: [],
@@ -22,6 +25,7 @@ import { UserModule } from 'src/modules/user/user.module';
         RoleModule,
         CategoriesModule,
         RepositoriesModule,
+        AwsModule,
     ],
 })
 export class RoutesPublicModule {}
