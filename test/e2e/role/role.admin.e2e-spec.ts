@@ -31,7 +31,7 @@ import { RoleUpdateNameDto } from 'src/modules/role/dtos/role.update-name.dto';
 import { RoleUpdatePermissionDto } from 'src/modules/role/dtos/role.update-permission.dto';
 import { Permission, Role } from '@prisma/client';
 import { E2E_PERMISSION_ADMIN_ACTIVE_URL, E2E_PERMISSION_ADMIN_CREATE_URL, E2E_PERMISSION_ADMIN_DELETE_URL, E2E_PERMISSION_ADMIN_GET_URL, E2E_PERMISSION_ADMIN_INACTIVE_URL, E2E_PERMISSION_ADMIN_LIST_URL, E2E_PERMISSION_ADMIN_UPDATE_URL } from '../permission/permission.constant';
-import { randomUUID } from 'crypto';
+import { GenerateUUID } from 'src/common/databases/constants/database.function.constant';
 
 describe('E2E Role Admin', () => {
     let app: INestApplication;
@@ -170,7 +170,7 @@ describe('E2E Role Admin', () => {
             .get(
                 E2E_PERMISSION_ADMIN_GET_URL.replace(
                     ':id',
-                    `${randomUUID()}`
+                    `${GenerateUUID()}`
                 )
             )
             .set('Authorization', `Bearer ${accessToken}`)
@@ -225,7 +225,7 @@ describe('E2E Role Admin', () => {
             .post(E2E_PERMISSION_ADMIN_CREATE_URL)
             .send({
                 ...successData,
-                permissions: [randomUUID()],
+                permissions: [GenerateUUID()],
             })
             .set('Authorization', `Bearer ${accessToken}`)
             .set('x-permission-token', permissionToken);
@@ -267,7 +267,7 @@ describe('E2E Role Admin', () => {
             .put(
                 E2E_PERMISSION_ADMIN_UPDATE_URL.replace(
                     ':id',
-                    `${randomUUID()}`
+                    `${GenerateUUID()}`
                 )
             )
             .send(updateData)
@@ -329,7 +329,7 @@ describe('E2E Role Admin', () => {
             .put(
                 E2E_PERMISSION_ADMIN_UPDATE_URL.replace(
                     ':id',
-                    `${randomUUID()}`
+                    `${GenerateUUID()}`
                 )
             )
             .send(updateDataPermission)
@@ -352,7 +352,7 @@ describe('E2E Role Admin', () => {
             )
             .send({
                 accessFor: ENUM_AUTH_ACCESS_FOR.SUPER_ADMIN,
-                permissions: [randomUUID()],
+                permissions: [GenerateUUID()],
             })
             .set('Authorization', `Bearer ${accessToken}`)
             .set('x-permission-token', permissionToken);
@@ -384,7 +384,7 @@ describe('E2E Role Admin', () => {
             .patch(
                 E2E_PERMISSION_ADMIN_INACTIVE_URL.replace(
                     ':id',
-                    `${randomUUID()}`
+                    `${GenerateUUID()}`
                 )
             )
             .set('Authorization', `Bearer ${accessToken}`)
@@ -423,7 +423,7 @@ describe('E2E Role Admin', () => {
             .patch(
                 E2E_PERMISSION_ADMIN_ACTIVE_URL.replace(
                     ':id',
-                    `${randomUUID()}`
+                    `${GenerateUUID()}`
                 )
             )
             .set('Authorization', `Bearer ${accessToken}`)
@@ -462,7 +462,7 @@ describe('E2E Role Admin', () => {
             .delete(
                 E2E_PERMISSION_ADMIN_DELETE_URL.replace(
                     ':id',
-                    `${randomUUID()}`
+                    `${GenerateUUID()}`
                 )
             )
             .set('Authorization', `Bearer ${accessToken}`)

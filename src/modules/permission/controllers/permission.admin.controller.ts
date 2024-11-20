@@ -8,13 +8,11 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Permission } from '@prisma/client';
-import { ENUM_AUTH_PERMISSIONS } from 'src/common/auth/constants/auth.enum.permission.constant';
 import { AuthJwtAdminAccessProtected } from 'src/common/auth/decorators/auth.jwt.decorator';
-import { AuthPermissionProtected } from 'src/common/auth/decorators/auth.permission.decorator';
 import { ENUM_ERROR_STATUS_CODE_ERROR } from 'src/common/error/constants/error.status-code.constant';
 import {
     PaginationQuery,
-    PaginationQueryFilterInBoolean,
+    PaginationQueryBoolean,
     PaginationQueryFilterInEnum,
 } from 'src/common/pagination/decorators/pagination.decorator';
 import { PaginationListDto } from 'src/common/pagination/dtos/pagination.list.dto';
@@ -77,7 +75,6 @@ export class PermissionAdminController {
     @ResponsePaging('permission.list', {
         serialization: PermissionListSerialization,
     })
-    @AuthPermissionProtected(ENUM_AUTH_PERMISSIONS.PERMISSION_READ)
     @AuthJwtAdminAccessProtected()
     @Get('/')
     async list(
@@ -89,10 +86,7 @@ export class PermissionAdminController {
             PERMISSION_DEFAULT_AVAILABLE_ORDER_BY
         )
         { _search, _limit, _offset, _order }: PaginationListDto,
-        @PaginationQueryFilterInBoolean(
-            'isActive',
-            PERMISSION_DEFAULT_IS_ACTIVE
-        )
+        @PaginationQueryBoolean('isActive')
         isActive: Record<string, any>,
         @PaginationQueryFilterInEnum(
             'group',
@@ -132,7 +126,6 @@ export class PermissionAdminController {
     @Response('permission.group', {
         serialization: PermissionGroupsSerialization,
     })
-    @AuthPermissionProtected(ENUM_AUTH_PERMISSIONS.PERMISSION_READ)
     @AuthJwtAdminAccessProtected()
     @Get('/group')
     async group(
@@ -158,7 +151,6 @@ export class PermissionAdminController {
     })
     @PermissionGetGuard()
     @RequestParamGuard(PermissionRequestDto)
-    @AuthPermissionProtected(ENUM_AUTH_PERMISSIONS.PERMISSION_READ)
     @AuthJwtAdminAccessProtected()
     @Get('/:permission')
     async get(@GetPermission(true) permission: Permission): Promise<IResponse> {
@@ -171,10 +163,6 @@ export class PermissionAdminController {
     })
     @PermissionUpdateGuard()
     @RequestParamGuard(PermissionRequestDto)
-    @AuthPermissionProtected(
-        ENUM_AUTH_PERMISSIONS.PERMISSION_READ,
-        ENUM_AUTH_PERMISSIONS.PERMISSION_UPDATE
-    )
     @AuthJwtAdminAccessProtected()
     @Put('/:permission')
     async update(
@@ -200,11 +188,6 @@ export class PermissionAdminController {
     @Response('permission.inactive')
     @PermissionUpdateInactiveGuard()
     @RequestParamGuard(PermissionRequestDto)
-    @AuthPermissionProtected(
-        ENUM_AUTH_PERMISSIONS.PERMISSION_READ,
-        ENUM_AUTH_PERMISSIONS.PERMISSION_UPDATE,
-        ENUM_AUTH_PERMISSIONS.PERMISSION_INACTIVE
-    )
     @AuthJwtAdminAccessProtected()
     @Patch('/:permission/inactive')
     async inactive(@GetPermission() permission: Permission): Promise<void> {
@@ -225,11 +208,6 @@ export class PermissionAdminController {
     @Response('permission.active', {})
     @PermissionUpdateActiveGuard()
     @RequestParamGuard(PermissionRequestDto)
-    @AuthPermissionProtected(
-        ENUM_AUTH_PERMISSIONS.PERMISSION_READ,
-        ENUM_AUTH_PERMISSIONS.PERMISSION_UPDATE,
-        ENUM_AUTH_PERMISSIONS.PERMISSION_ACTIVE
-    )
     @AuthJwtAdminAccessProtected()
     @Patch('/:permission/active')
     async active(@GetPermission() permission: Permission): Promise<void> {

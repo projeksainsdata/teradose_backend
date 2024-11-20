@@ -16,4 +16,18 @@ export interface IHelperStringService {
     checkPasswordStrong(password: string, length?: number): boolean;
 
     checkSafeString(text: string): boolean;
+
+    convertToSlug(text: string): string;
+
+    convertToCamelCase(text: string): string;
+
+    convertToSnakeCase(text: string): string;
+
+    convertToKebabCase(text: string): string;
+
+    convertToTitleCase(text: string): string;
+
+    convertToSentenceCase(text: string): string;
+
+    convertToUpperCase(text: string): string;
 }

@@ -1,7 +1,7 @@
 {
     "name": "teradose.server",
     "version": "0.0.1",
-    "description":  "Restful API for Teradose",
+    "description": "Restful API for Teradose",
     "author": "EgiStr",
     "private": true,
     "license": "ISC",
@@ -70,8 +70,7 @@
         "rxjs": "^7.8.1",
         "ua-parser-js": "^1.0.39",
         "uuid": "^10.0.0",
-        "winston-daily-rotate-file": "^5.0.0",
-        "zod": "^3.23.8"
+        "winston-daily-rotate-file": "^5.0.0"
     },
     "devDependencies": {
         "@nestjs/cli": "^10.0.0",

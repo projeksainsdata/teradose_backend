@@ -14,6 +14,7 @@ import { PaginationFilterInEnumPipe } from 'src/common/pagination/pipes/paginati
 import { PaginationOrderPipe } from 'src/common/pagination/pipes/pagination.order.pipe';
 import { PaginationPagingPipe } from 'src/common/pagination/pipes/pagination.paging.pipe';
 import { PaginationSearchPipe } from 'src/common/pagination/pipes/pagination.search.pipe';
+import { PaginationFilterEqualBooleanPipe } from '../pipes/pagination.filter-boolean.pipe';
 
 export function PaginationQuery(
     defaultPerPage: number,
@@ -82,4 +83,8 @@ export function PaginationQueryFilterEqualObjectId(
     field: string
 ): ParameterDecorator {
     return Query(field, PaginationFilterEqualObjectIdPipe);
+}
+
+export function PaginationQueryBoolean(field: string): ParameterDecorator {
+    return Query(field, PaginationFilterEqualBooleanPipe);
 }

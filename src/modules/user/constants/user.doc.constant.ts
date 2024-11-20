@@ -3,22 +3,20 @@ import { faker } from '@faker-js/faker';
 export const UserDocQueryIsActive = [
     {
         name: 'isActive',
-        allowEmptyValue: false,
-        required: true,
+        required: false,
         type: 'string',
-        example: 'true,false',
-        description: "boolean value with ',' delimiter",
+        example: 'true',
+        description: "boolean value",
     },
 ];
 
 export const UserDocQueryBlocked = [
     {
         name: 'blocked',
-        allowEmptyValue: false,
-        required: true,
         type: 'string',
-        example: 'true,false',
-        description: "boolean value with ',' delimiter",
+        default: 'false',
+        example: 'false',
+        description: "boolean value",
     },
 ];
 

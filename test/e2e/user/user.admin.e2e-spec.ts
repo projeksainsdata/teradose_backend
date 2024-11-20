@@ -24,7 +24,7 @@ import { ENUM_USER_STATUS_CODE_ERROR } from 'src/modules/user/constants/user.sta
 import { RoleService } from 'src/modules/role/services/role.service';
 import { ENUM_ROLE_STATUS_CODE_ERROR } from 'src/modules/role/constants/role.status-code.constant';
 import { Role, User } from '@prisma/client';
-import { randomUUID } from 'crypto';
+import { GenerateUUID } from 'src/common/databases/constants/database.function.constant';
 
 describe('E2E User Admin', () => {
     let app: INestApplication;
@@ -156,7 +156,7 @@ describe('E2E User Admin', () => {
     it(`POST ${E2E_USER_ADMIN_CREATE_URL} Create, Role Not Found`, async () => {
         const datauser = {
             ...userData,
-            role: `${randomUUID()}`,
+            role: `${GenerateUUID()}`,
             password,
         };
 
@@ -204,7 +204,7 @@ describe('E2E User Admin', () => {
 
     it(`GET ${E2E_USER_ADMIN_GET_URL} Get Not Found`, async () => {
         const response = await request(app.getHttpServer())
-            .get(E2E_USER_ADMIN_GET_URL.replace(':id', `${randomUUID()}`))
+            .get(E2E_USER_ADMIN_GET_URL.replace(':id', `${GenerateUUID()}`))
             .set('Authorization', `Bearer ${accessToken}`)
             .set('x-permission-token', permissionToken);
 
@@ -242,7 +242,7 @@ describe('E2E User Admin', () => {
 
     it(`PUT ${E2E_USER_ADMIN_UPDATE_URL} Update, not found`, async () => {
         const response = await request(app.getHttpServer())
-            .put(E2E_USER_ADMIN_UPDATE_URL.replace(':id', `${randomUUID()}`))
+            .put(E2E_USER_ADMIN_UPDATE_URL.replace(':id', `${GenerateUUID()}`))
             .set('Authorization', `Bearer ${accessToken}`)
             .set('x-permission-token', permissionToken)
             .send({
@@ -273,7 +273,7 @@ describe('E2E User Admin', () => {
     it(`PATCH ${E2E_USER_ADMIN_INACTIVE_URL} Inactive, Not Found`, async () => {
         const response = await request(app.getHttpServer())
             .patch(
-                E2E_USER_ADMIN_INACTIVE_URL.replace(':id', `${randomUUID()}`)
+                E2E_USER_ADMIN_INACTIVE_URL.replace(':id', `${GenerateUUID()}`)
             )
             .set('Authorization', `Bearer ${accessToken}`)
             .set('x-permission-token', permissionToken);
@@ -308,7 +308,7 @@ describe('E2E User Admin', () => {
 
     it(`PATCH ${E2E_USER_ADMIN_ACTIVE_URL} Active, Not Found`, async () => {
         const response = await request(app.getHttpServer())
-            .patch(E2E_USER_ADMIN_ACTIVE_URL.replace(':id', `${randomUUID()}`))
+            .patch(E2E_USER_ADMIN_ACTIVE_URL.replace(':id', `${GenerateUUID()}`))
             .set('Authorization', `Bearer ${accessToken}`)
             .set('x-permission-token', permissionToken);
 
@@ -342,7 +342,7 @@ describe('E2E User Admin', () => {
 
     it(`PATCH ${E2E_USER_ADMIN_BLOCKED_URL} Blocked, Not Found`, async () => {
         const response = await request(app.getHttpServer())
-            .patch(E2E_USER_ADMIN_BLOCKED_URL.replace(':id', `${randomUUID()}`))
+            .patch(E2E_USER_ADMIN_BLOCKED_URL.replace(':id', `${GenerateUUID()}`))
             .set('Authorization', `Bearer ${accessToken}`)
             .set('x-permission-token', permissionToken);
 
@@ -364,7 +364,7 @@ describe('E2E User Admin', () => {
 
     it(`DELETE ${E2E_USER_ADMIN_DELETE_URL} Delete, Not Found`, async () => {
         const response = await request(app.getHttpServer())
-            .delete(E2E_USER_ADMIN_DELETE_URL.replace(':id', `${randomUUID()}`))
+            .delete(E2E_USER_ADMIN_DELETE_URL.replace(':id', `${GenerateUUID()}`))
             .set('Authorization', `Bearer ${accessToken}`)
             .set('x-permission-token', permissionToken);
 

@@ -15,7 +15,7 @@ import { ENUM_SETTING_STATUS_CODE_ERROR } from 'src/common/setting/constants/set
 import { SettingService } from 'src/common/setting/services/setting.service';
 import { ENUM_SETTING_DATA_TYPE } from 'src/common/setting/constants/setting.enum.constant';
 import { Setting } from '@prisma/client';
-import { randomUUID } from 'crypto';
+import { GenerateUUID } from 'src/common/databases/constants/database.function.constant';
 
 describe('E2E Setting', () => {
     let app: INestApplication;
@@ -79,7 +79,7 @@ describe('E2E Setting', () => {
         const response = await request(app.getHttpServer()).get(
             E2E_SETTING_COMMON_GET_URL.replace(
                 ':_id',
-                `${randomUUID()}`
+                `${GenerateUUID()}`
             )
         );
 

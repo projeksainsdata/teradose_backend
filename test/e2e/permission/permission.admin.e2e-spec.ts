@@ -24,7 +24,7 @@ import {
 } from 'test/e2e/user/user.constant';
 import { PermissionUpdateDescriptionDto } from 'src/modules/permission/dtos/permission.update-description.dto';
 import { Permission } from '@prisma/client';
-import { randomUUID } from 'crypto';
+import { GenerateUUID } from 'src/common/databases/constants/database.function.constant';
 
 describe('E2E Permission Admin', () => {
     let app: INestApplication;
@@ -121,7 +121,7 @@ describe('E2E Permission Admin', () => {
             .get(
                 E2E_PERMISSION_ADMIN_GET_URL.replace(
                     ':id',
-                    randomUUID().toString()
+                    GenerateUUID()
                 )
             )
             .set('Authorization', `Bearer ${accessToken}`)
@@ -148,7 +148,7 @@ describe('E2E Permission Admin', () => {
             .put(
                 E2E_PERMISSION_ADMIN_UPDATE_URL.replace(
                     ':id',
-                    `${randomUUID()}`
+                    `${GenerateUUID()}`
                 )
             )
             .send(updateData)
@@ -192,7 +192,7 @@ describe('E2E Permission Admin', () => {
             .patch(
                 E2E_PERMISSION_ADMIN_ACTIVE_URL.replace(
                     ':id',
-                    `${randomUUID()}`
+                    `${GenerateUUID()}`
                 )
             )
             .set('Authorization', `Bearer ${accessToken}`)
@@ -223,7 +223,7 @@ describe('E2E Permission Admin', () => {
             .patch(
                 E2E_PERMISSION_ADMIN_INACTIVE_URL.replace(
                     ':id',
-                    `${randomUUID()}`
+                    `${GenerateUUID()}`
                 )
             )
             .set('Authorization', `Bearer ${accessToken}`)

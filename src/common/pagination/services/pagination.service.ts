@@ -82,8 +82,7 @@ export class PaginationService implements IPaginationService {
         return {
             OR: availableSearch.map((val) => ({
                 [val]: {
-                    contains: searchValue,
-                    mode: 'insensitive',
+                    contains: searchValue
                 },
             })),
         };
@@ -119,7 +118,7 @@ export class PaginationService implements IPaginationService {
     filterIn<T = string>(
         field: string,
         filterValue: T[]
-): Record<string, { in: T[] }> {
+    ): Record<string, { in: T[] }> {
         return {
             [field]: {
                 in: filterValue,

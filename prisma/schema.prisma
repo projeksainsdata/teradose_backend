@@ -9,9 +9,10 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
 enum ENUM_LOGGER_LEVEL {
   DEBUG
   INFO
@@ -30,7 +31,7 @@ enum ENUM_LOGGER_ACTION {
 }
 
 model Logger {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   level       String
   action      String
   method      String
@@ -42,9 +43,9 @@ model Logger {
   accessFor   String?
   description String
   path        String?
-  tags        String[]
-  params      String   @default("{}")  // Stored as JSON string
-  bodies      String   @default("{}")  // Stored as JSON string
+  tags        String
+  params      String   @default("{}") // Stored as JSON string
+  bodies      String   @default("{}") // Stored as JSON string
   statusCode  Int?
   createdAt   DateTime @default(now())
 
@@ -61,7 +62,7 @@ enum ENUM_SETTING_DATA_TYPE {
 }
 
 model Setting {
-  id          String                  @id @default(cuid())
+  id          String                  @id @default(uuid())
   name        String                  @unique
   description String?
   type        ENUM_SETTING_DATA_TYPE?
@@ -78,6 +79,10 @@ enum ENUM_PERMISSION_GROUP {
   ROLE
   PERMISSION
   SETTING
+  LOGGER
+  BLOG
+  REPOSITORY
+  CATEGORY
 }
 
 enum ENUM_ACCESS_FOR {
@@ -87,7 +92,7 @@ enum ENUM_ACCESS_FOR {
 }
 
 model Role {
-  id        String          @id @default(cuid())
+  id        String          @id @default(uuid())
   name      String          @unique
   isActive  Boolean         @default(true)
   accessFor ENUM_ACCESS_FOR
@@ -102,7 +107,7 @@ model Role {
 }
 
 model Permission {
-  id          String                @id @default(cuid())
+  id          String                @id @default(uuid())
   code        String                @unique @db.VarChar(25)
   group       ENUM_PERMISSION_GROUP
   description String                @db.VarChar(255)
@@ -130,18 +135,18 @@ model RolePermission {
 }
 
 model User {
-  id       String @id @default(cuid())
+  id       String @id @default(uuid())
   fullName String @db.VarChar(100)
   email    String @unique @db.VarChar(100)
   jobTitle String
 
-  role String @db.VarChar(100) @default("USER")
+  role String @default("USER") @db.VarChar(100)
 
-  password          String   @db.VarChar(255)
-  passwordExpired   DateTime 
+  password          String    @db.VarChar(255)
+  passwordExpired   DateTime
   passwordCreated   DateTime
   passwordAttempt   Int       @default(0)
-  signUpDate        DateTime? 
+  signUpDate        DateTime?
   salt              String
   isActive          Boolean   @default(true)
   inactivePermanent Boolean   @default(false)
@@ -151,7 +156,8 @@ model User {
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 
-  roles Role @relation(fields: [role], references: [id], onDelete: SetDefault)
+  roles Role    @relation(fields: [role], references: [id], onDelete: NoAction)
+  Blogs Blogs[]
 
   @@index([fullName])
   @@index([email])
@@ -160,4 +166,94 @@ model User {
   @@index([inactivePermanent])
   @@index([blocked])
   @@map("users")
+}
+
+enum ENUM_STATUS {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ENUM_CATEGORIES_TYPE {
+  REPOSITORIES
+  BLOGS
+}
+
+model categories {
+  id          String @id @default(uuid())
+  name        String @unique @db.VarChar(100)
+  description String @db.Text
+  slug        String @unique @db.VarChar(100)
+
+  createdAt DateTime @default(now())
+
+  type         ENUM_CATEGORIES_TYPE
+  Blogs        Blogs[]
+  Repositories Repositories[]
+
+  @@index([name, slug, type])
+  @@map("categories")
+}
+
+model Blogs {
+  id String @id @default(uuid())
+
+  title String @unique @db.VarChar(255)
+  slug  String @unique @db.VarChar(255)
+
+  thumbnail String @db.VarChar(255)
+
+  content     String
+  description String @db.Text
+
+  category   String     @db.VarChar(100)
+  categories categories @relation(fields: [category], references: [id], onDelete: Cascade)
+
+  status    ENUM_STATUS @default(DRAFT)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([title])
+  @@index([slug])
+  @@index([category])
+  @@index([status])
+  @@index([user_id])
+  @@map("blogs")
+}
+
+model Repositories {
+  id String @id @default(uuid())
+
+  title String @unique @db.VarChar(255)
+  slug  String @unique @db.VarChar(255)
+
+  thumbnail String @db.VarChar(255)
+
+  description        String  @db.Text
+  indication         String? @db.VarChar(255)
+  composition        String? @db.VarChar(255)
+  dose               String? @db.VarChar(255)
+  usage_guideline    String? @db.VarChar(255)
+  attention          String? @db.VarChar(255)
+  contraindication   String? @db.VarChar(255)
+  side_effect        String? @db.VarChar(255)
+  product_categories String? @db.VarChar(255)
+  no_registration    String? @db.VarChar(255)
+
+  category   String     @db.VarChar(100)
+  categories categories @relation(fields: [category], references: [id], onDelete: Cascade)
+
+  status    ENUM_STATUS @default(DRAFT)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@index([title])
+  @@index([slug])
+  @@index([category])
+  @@index([status])
+  @@index([product_categories])
+  @@map("repositories")
 }

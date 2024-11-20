@@ -9,20 +9,10 @@ import {
     NotFoundException,
     ConflictException,
     Patch,
-    HttpCode,
-    HttpStatus,
-    UploadedFile,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { ENUM_AUTH_PERMISSIONS } from 'src/common/auth/constants/auth.enum.permission.constant';
 import { AuthService } from 'src/common/auth/services/auth.service';
 import { ENUM_ERROR_STATUS_CODE_ERROR } from 'src/common/error/constants/error.status-code.constant';
-import { UploadFileSingle } from 'src/common/file/decorators/file.decorator';
-import { IFileExtract } from 'src/common/file/interfaces/file.interface';
-import { FileRequiredPipe } from 'src/common/file/pipes/file.required.pipe';
-import { FileSizeExcelPipe } from 'src/common/file/pipes/file.size.pipe';
-import { FileTypeExcelPipe } from 'src/common/file/pipes/file.type.pipe';
-import { FileValidationPipe } from 'src/common/file/pipes/file.validation.pipe';
 import { PaginationService } from 'src/common/pagination/services/pagination.service';
 import { RequestParamGuard } from 'src/common/request/decorators/request.decorator';
 import {
@@ -58,18 +48,14 @@ import {
 } from 'src/modules/user/docs/user.admin.doc';
 import { UserCreateDto } from 'src/modules/user/dtos/user.create.dto';
 import { UserRequestDto } from 'src/modules/user/dtos/user.request.dto';
-
 import { UserGetSerialization } from 'src/modules/user/serializations/user.get.serialization';
 import { UserListSerialization } from 'src/modules/user/serializations/user.list.serialization';
 import { UserService } from 'src/modules/user/services/user.service';
 import { AuthJwtAdminAccessProtected } from 'src/common/auth/decorators/auth.jwt.decorator';
-import { AuthPermissionProtected } from 'src/common/auth/decorators/auth.permission.decorator';
 import { UserUpdateNameDto } from 'src/modules/user/dtos/user.update-name.dto';
 import {
     USER_DEFAULT_AVAILABLE_ORDER_BY,
     USER_DEFAULT_AVAILABLE_SEARCH,
-    USER_DEFAULT_BLOCKED,
-    USER_DEFAULT_IS_ACTIVE,
     USER_DEFAULT_ORDER_BY,
     USER_DEFAULT_ORDER_DIRECTION,
     USER_DEFAULT_PER_PAGE,
@@ -77,7 +63,7 @@ import {
 import { PaginationListDto } from 'src/common/pagination/dtos/pagination.list.dto';
 import {
     PaginationQuery,
-    PaginationQueryFilterInBoolean,
+    PaginationQueryBoolean,
 } from 'src/common/pagination/decorators/pagination.decorator';
 import { IAuthPassword } from '../../../common/auth/interfaces/auth.interface';
 import { User } from '@prisma/client';
@@ -100,7 +86,6 @@ export class UserAdminController {
     @ResponsePaging('user.list', {
         serialization: UserListSerialization,
     })
-    @AuthPermissionProtected(ENUM_AUTH_PERMISSIONS.USER_READ)
     @AuthJwtAdminAccessProtected()
     @Get('/')
     async list(
@@ -112,9 +97,9 @@ export class UserAdminController {
             USER_DEFAULT_AVAILABLE_ORDER_BY
         )
         { _search, _limit, _offset, _order }: PaginationListDto,
-        @PaginationQueryFilterInBoolean('isActive', USER_DEFAULT_IS_ACTIVE)
+        @PaginationQueryBoolean('isActive')
         isActive: Record<string, any>,
-        @PaginationQueryFilterInBoolean('blocked', USER_DEFAULT_BLOCKED)
+        @PaginationQueryBoolean('blocked')
         blocked: Record<string, any>
     ): Promise<IResponsePaging> {
         const find: Record<string, any> = {
@@ -146,7 +131,6 @@ export class UserAdminController {
     })
     @UserGetGuard()
     @RequestParamGuard(UserRequestDto)
-    @AuthPermissionProtected(ENUM_AUTH_PERMISSIONS.USER_READ)
     @AuthJwtAdminAccessProtected()
     @Get('/:user')
     async get(@GetUser() user: User): Promise<IResponse> {
@@ -160,10 +144,6 @@ export class UserAdminController {
     @Response('user.create', {
         serialization: ResponseIdSerialization,
     })
-    @AuthPermissionProtected(
-        ENUM_AUTH_PERMISSIONS.USER_READ,
-        ENUM_AUTH_PERMISSIONS.USER_CREATE
-    )
     @AuthJwtAdminAccessProtected()
     @Post('/')
     async create(
@@ -211,10 +191,6 @@ export class UserAdminController {
     @Response('user.delete')
     @UserDeleteGuard()
     @RequestParamGuard(UserRequestDto)
-    @AuthPermissionProtected(
-        ENUM_AUTH_PERMISSIONS.USER_READ,
-        ENUM_AUTH_PERMISSIONS.USER_DELETE
-    )
     @AuthJwtAdminAccessProtected()
     @Delete('/:user')
     async delete(@GetUser() user: User): Promise<void> {
@@ -237,10 +213,6 @@ export class UserAdminController {
     })
     @UserUpdateGuard()
     @RequestParamGuard(UserRequestDto)
-    @AuthPermissionProtected(
-        ENUM_AUTH_PERMISSIONS.USER_READ,
-        ENUM_AUTH_PERMISSIONS.USER_UPDATE
-    )
     @AuthJwtAdminAccessProtected()
     @Put('/:user')
     async update(
@@ -267,11 +239,6 @@ export class UserAdminController {
     @Response('user.inactive')
     @UserUpdateInactiveGuard()
     @RequestParamGuard(UserRequestDto)
-    @AuthPermissionProtected(
-        ENUM_AUTH_PERMISSIONS.USER_READ,
-        ENUM_AUTH_PERMISSIONS.USER_UPDATE,
-        ENUM_AUTH_PERMISSIONS.USER_INACTIVE
-    )
     @AuthJwtAdminAccessProtected()
     @Patch('/:user/inactive')
     async inactive(@GetUser() user: User): Promise<void> {
@@ -292,11 +259,6 @@ export class UserAdminController {
     @Response('user.active')
     @UserUpdateActiveGuard()
     @RequestParamGuard(UserRequestDto)
-    @AuthPermissionProtected(
-        ENUM_AUTH_PERMISSIONS.USER_READ,
-        ENUM_AUTH_PERMISSIONS.USER_UPDATE,
-        ENUM_AUTH_PERMISSIONS.USER_ACTIVE
-    )
     @AuthJwtAdminAccessProtected()
     @Patch('/:user/active')
     async active(@GetUser() user: User): Promise<void> {
@@ -317,11 +279,6 @@ export class UserAdminController {
     @Response('user.blocked')
     @UserUpdateBlockedGuard()
     @RequestParamGuard(UserRequestDto)
-    @AuthPermissionProtected(
-        ENUM_AUTH_PERMISSIONS.USER_READ,
-        ENUM_AUTH_PERMISSIONS.USER_UPDATE,
-        ENUM_AUTH_PERMISSIONS.USER_BLOCKED
-    )
     @AuthJwtAdminAccessProtected()
     @Patch('/:user/blocked')
     async blocked(@GetUser() user: User): Promise<void> {

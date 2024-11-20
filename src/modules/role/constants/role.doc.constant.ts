@@ -4,22 +4,19 @@ import { ENUM_AUTH_ACCESS_FOR } from 'src/common/auth/constants/auth.enum.consta
 export const RoleDocQueryIsActive = [
     {
         name: 'isActive',
-        allowEmptyValue: false,
-        required: true,
+        required: false,
         type: 'string',
-        example: 'true,false',
-        description: "boolean value with ',' delimiter",
+        example: 'true',
     },
 ];
 
 export const RoleDocQueryAccessFor = [
     {
         name: 'accessFor',
-        allowEmptyValue: false,
-        required: true,
+        required: false,
         type: 'string',
         example: Object.values(ENUM_AUTH_ACCESS_FOR).join(','),
-        description: "enum value with ',' delimiter",
+        description: 'enum value',
     },
 ];
 

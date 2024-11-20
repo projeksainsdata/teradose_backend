@@ -1,0 +1,10 @@
+export enum CATEGORY_TYPE {
+    REPOSITORIES = 'REPOSITORIES',
+    BLOGS = 'BLOGS',
+}
+
+export const ENUM_CATEGORY_TYPE = {
+    ...CATEGORY_TYPE,
+};
+
+export type ENUM_CATEGORY_TYPE = CATEGORY_TYPE;

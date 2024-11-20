@@ -5,16 +5,13 @@ import { IsBoolean, IsDate, IsNotEmpty } from 'class-validator';
 export class UserBlockedDto {
     @ApiProperty({
         name: 'blocked',
-        required: true,
-        nullable: false,
+        required: false,
     })
     @IsBoolean()
-    @IsNotEmpty()
     blocked: boolean;
 
     @ApiProperty({
         name: 'blockedDate',
-        required: true,
         nullable: false,
     })
     @IsDate()

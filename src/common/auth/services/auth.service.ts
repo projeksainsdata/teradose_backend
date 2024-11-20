@@ -196,12 +196,7 @@ export class AuthService implements IAuthService {
             { data: payloadHashed },
             {
                 secretKey: this.refreshTokenSecretKey,
-                expiredIn: options?.rememberMe
-                    ? this.refreshTokenExpirationTimeRememberMe
-                    : this.refreshTokenExpirationTime,
-                notBefore:
-                    options?.notBeforeExpirationTime ??
-                    this.refreshTokenNotBeforeExpirationTime,
+                expiredIn: this.refreshTokenExpirationTime,
                 audience: this.audience,
                 issuer: this.issuer,
                 subject: this.subject,

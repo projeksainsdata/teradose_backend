@@ -207,6 +207,14 @@ export class LoggerService implements ILoggerService {
         let bodiesString = '';
         let paramsString = '';
 
+        if (bodies instanceof Object) {
+            bodiesString = JSON.stringify(bodies);
+        }
+
+        if (params instanceof Object) {
+            paramsString = JSON.stringify(params);
+        }
+
         const create = {
             level,
             user,

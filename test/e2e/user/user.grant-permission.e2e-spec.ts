@@ -16,7 +16,7 @@ import { RoleModule } from 'src/modules/role/role.module';
 import { PermissionModule } from 'src/modules/permission/permission.module';
 import { ENUM_PERMISSION_GROUP } from 'src/modules/permission/constants/permission.enum.constant';
 import { Role, User } from '@prisma/client';
-import { randomUUID } from 'crypto';
+import { GenerateUUID } from 'src/common/databases/constants/database.function.constant';
 
 describe('E2E User Grant Password', () => {
     let app: INestApplication;
@@ -83,7 +83,7 @@ describe('E2E User Grant Password', () => {
         const payload = await authService.createPayloadAccessToken(map, false);
         const payloadNotFound = {
             ...payload,
-            id: `${randomUUID()}`,
+            id: `${GenerateUUID()}`,
         };
 
         accessToken = await authService.createAccessToken(payload);

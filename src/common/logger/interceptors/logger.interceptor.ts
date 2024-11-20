@@ -74,7 +74,9 @@ export class LoggerInterceptor implements NestInterceptor<any> {
                         bodies: bodyString,
                         path,
                         statusCode,
-                        tags: loggerOptions?.tags ?? [],
+                        tags: Array.isArray(loggerOptions?.tags)
+                            ? loggerOptions.tags.join(', ')
+                            : (loggerOptions?.tags ?? ''),
                     });
                 })
             );

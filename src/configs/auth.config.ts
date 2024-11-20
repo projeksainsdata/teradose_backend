@@ -1,14 +1,17 @@
 import { registerAs } from '@nestjs/config';
+import { ENUM_APP_ENVIRONMENT } from 'src/app/constants/app.enum.constant';
 import { seconds } from 'src/common/helper/constants/helper.function.constant';
 
-export default registerAs(
-    'auth',
-    (): Record<string, any> => ({
+export default registerAs('auth', (): Record<string, any> => {
+    const isProduction =
+        process.env.APP_ENV === ENUM_APP_ENVIRONMENT.PRODUCTION;
+
+    return {
         accessToken: {
             secretKey: process.env.AUTH_JWT_ACCESS_TOKEN_SECRET_KEY ?? '123456',
-            expirationTime: seconds(
-                process.env.AUTH_JWT_ACCESS_TOKEN_EXPIRED ?? '15m'
-            ), // recommendation for production is 15m
+            expirationTime: isProduction
+                ? seconds(process.env.AUTH_JWT_REFRESH_TOKEN_EXPIRED ?? '15m')
+                : seconds('7d'), // 7 days for non-production environments
             notBeforeExpirationTime: seconds('0'), // keep it in zero value
 
             encryptKey: process.env.AUTH_JWT_PAYLOAD_ACCESS_TOKEN_ENCRYPT_KEY,
@@ -18,9 +21,9 @@ export default registerAs(
         refreshToken: {
             secretKey:
                 process.env.AUTH_JWT_REFRESH_TOKEN_SECRET_KEY ?? '123456000',
-            expirationTime: seconds(
-                process.env.AUTH_JWT_REFRESH_TOKEN_EXPIRED ?? '7d'
-            ), // recommendation for production is 7d
+            expirationTime: isProduction
+                ? seconds(process.env.AUTH_JWT_REFRESH_TOKEN_EXPIRED ?? '7d')
+                : seconds('7d'), // 7 days for non-production environments
             expirationTimeRememberMe: seconds(
                 process.env.AUTH_JWT_REFRESH_TOKEN_REMEMBER_ME_EXPIRED ?? '30d'
             ), // recommendation for production is 30d
@@ -58,5 +61,5 @@ export default registerAs(
             saltLength: 8,
             expiredIn: seconds('182d'), // recommendation for production is 182 days
         },
-    })
-);
+    };
+});

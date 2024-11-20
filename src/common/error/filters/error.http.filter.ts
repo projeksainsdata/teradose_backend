@@ -9,8 +9,8 @@ import {
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
 import { ConfigService } from '@nestjs/config';
 import { ValidationError } from 'class-validator';
-import { randomUUID } from 'crypto';
 import { Response } from 'express';
+import { GenerateUUID } from 'src/common/databases/constants/database.function.constant';
 import { DebuggerService } from 'src/common/debugger/services/debugger.service';
 import { ERROR_TYPE } from 'src/common/error/constants/error.enum.constant';
 import {
@@ -54,7 +54,7 @@ export class ErrorHttpFilter implements ExceptionFilter {
             request.__customLang ?? this.appDefaultLanguage;
         const __class = request.__class ?? ErrorHttpFilter.name;
         const __function = request.__function ?? this.catch.name;
-        const __requestId = request.__id || randomUUID();
+        const __requestId = request.__id || GenerateUUID();
         const __path = request.path;
         const __timestamp =
             request.__xTimestamp ??

@@ -17,7 +17,7 @@ import {
     E2E_USER_PERMISSION_TOKEN_PAYLOAD_TEST,
 } from 'test/e2e/user/user.constant';
 import { Setting } from '@prisma/client';
-import { randomUUID } from 'crypto';
+import { GenerateUUID } from 'src/common/databases/constants/database.function.constant';
 
 describe('E2E Setting Admin', () => {
     let app: INestApplication;
@@ -88,7 +88,7 @@ describe('E2E Setting Admin', () => {
 
     it(`PUT ${E2E_SETTING_ADMIN_UPDATE_URL} Update Not Found`, async () => {
         const response = await request(app.getHttpServer())
-            .put(E2E_SETTING_ADMIN_UPDATE_URL.replace(':id', `${randomUUID()}`))
+            .put(E2E_SETTING_ADMIN_UPDATE_URL.replace(':id', `${GenerateUUID()}`))
             .set('Authorization', `Bearer ${accessToken}`)
             .set('x-permission-token', permissionToken)
             .send({ value: 'true', type: ENUM_SETTING_DATA_TYPE.BOOLEAN });

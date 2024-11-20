@@ -81,4 +81,48 @@ export class HelperStringService implements IHelperStringService {
         const regex = new RegExp('^[A-Za-z0-9_-]+$');
         return regex.test(text);
     }
+
+    convertToSlug(text: string): string {
+        return text
+            .toLowerCase()
+            .replace(/ /g, '-')
+            .replace(/[^\w-]+/g, '');
+    }
+
+    convertToCamelCase(text: string): string {
+        return text
+            .replace(/\s(.)/g, ($1) => $1.toUpperCase())
+            .replace(/\s/g, '')
+            .replace(/^(.)/, ($1) => $1.toLowerCase());
+    }
+
+    convertToSnakeCase(text: string): string {
+        return text
+            .replace(/\s/g, '_')
+            .replace(/([A-Z])/g, ($1) => `_${$1.toLowerCase()}`);
+    }
+
+    convertToKebabCase(text: string): string {
+        return text
+            .replace(/\s/g, '-')
+            .replace(/([A-Z])/g, ($1) => `-${$1.toLowerCase()}`);
+    }
+
+    convertToTitleCase(text: string): string {
+        return text
+            .toLowerCase()
+            .split(' ')
+            .map((word) => word.replace(word[0], word[0].toUpperCase()))
+            .join(' ');
+    }
+
+    convertToSentenceCase(text: string): string {
+        return text
+            .toLowerCase()
+            .replace(/(^\s*\w|[\.\!\?]\s*\w)/g, ($1) => $1.toUpperCase());
+    }
+
+    convertToUpperCase(text: string): string {
+        return text.toUpperCase();
+    }
 }

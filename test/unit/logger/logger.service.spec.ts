@@ -2,8 +2,8 @@ import { faker } from '@faker-js/faker';
 import { ConfigModule } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import { Logger } from '@prisma/client';
-import { randomUUID } from 'crypto';
 import { ENUM_AUTH_ACCESS_FOR } from 'src/common/auth/constants/auth.enum.constant';
+import { GenerateUUID } from 'src/common/databases/constants/database.function.constant';
 
 import { HelperModule } from 'src/common/helper/helper.module';
 import {
@@ -31,9 +31,9 @@ describe('LoggerService', () => {
     const loggerComplete: LoggerCreateDto = {
         action: ENUM_LOGGER_ACTION.TEST,
         description: 'test aaa',
-        user: randomUUID(),
-        requestId: randomUUID(),
-        role: randomUUID(),
+        user: GenerateUUID(),
+        requestId: GenerateUUID(),
+        role: GenerateUUID(),
         accessFor: ENUM_AUTH_ACCESS_FOR.SUPER_ADMIN,
         method: ENUM_REQUEST_METHOD.GET,
         statusCode: 10000,

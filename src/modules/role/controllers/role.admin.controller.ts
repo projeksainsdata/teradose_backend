@@ -13,13 +13,12 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { Permission, Role } from '@prisma/client';
 import { ENUM_AUTH_ACCESS_FOR } from 'src/common/auth/constants/auth.enum.constant';
-import { ENUM_AUTH_PERMISSIONS } from 'src/common/auth/constants/auth.enum.permission.constant';
 import { AuthJwtAdminAccessProtected } from 'src/common/auth/decorators/auth.jwt.decorator';
-import { AuthPermissionProtected } from 'src/common/auth/decorators/auth.permission.decorator';
 import { ENUM_ERROR_STATUS_CODE_ERROR } from 'src/common/error/constants/error.status-code.constant';
 import {
     PaginationQuery,
-    PaginationQueryFilterInBoolean,
+    PaginationQueryBoolean,
+    PaginationQueryFilterEqual,
     PaginationQueryFilterInEnum,
 } from 'src/common/pagination/decorators/pagination.decorator';
 import { PaginationListDto } from 'src/common/pagination/dtos/pagination.list.dto';
@@ -40,7 +39,6 @@ import {
     ROLE_DEFAULT_ACCESS_FOR,
     ROLE_DEFAULT_AVAILABLE_ORDER_BY,
     ROLE_DEFAULT_AVAILABLE_SEARCH,
-    ROLE_DEFAULT_IS_ACTIVE,
     ROLE_DEFAULT_ORDER_BY,
     ROLE_DEFAULT_ORDER_DIRECTION,
     ROLE_DEFAULT_PER_PAGE,
@@ -91,7 +89,6 @@ export class RoleAdminController {
     @ResponsePaging('role.list', {
         serialization: RoleListSerialization,
     })
-    @AuthPermissionProtected(ENUM_AUTH_PERMISSIONS.ROLE_READ)
     @AuthJwtAdminAccessProtected()
     @Get('/')
     async list(
@@ -103,7 +100,7 @@ export class RoleAdminController {
             ROLE_DEFAULT_AVAILABLE_ORDER_BY
         )
         { _search, _limit, _offset, _order }: PaginationListDto,
-        @PaginationQueryFilterInBoolean('isActive', ROLE_DEFAULT_IS_ACTIVE)
+        @PaginationQueryBoolean('isActive')
         isActive: Record<string, any>,
         @PaginationQueryFilterInEnum(
             'accessFor',
@@ -142,7 +139,6 @@ export class RoleAdminController {
     })
     @RoleGetGuard()
     @RequestParamGuard(RoleRequestDto)
-    @AuthPermissionProtected(ENUM_AUTH_PERMISSIONS.ROLE_READ)
     @AuthJwtAdminAccessProtected()
     @Get('/:role')
     async get(@GetRole(true) role: Role): Promise<IResponse> {
@@ -158,10 +154,6 @@ export class RoleAdminController {
     @Response('role.create', {
         serialization: ResponseIdSerialization,
     })
-    @AuthPermissionProtected(
-        ENUM_AUTH_PERMISSIONS.ROLE_READ,
-        ENUM_AUTH_PERMISSIONS.ROLE_CREATE
-    )
     @AuthJwtAdminAccessProtected()
     @Post('/')
     async create(
@@ -211,10 +203,6 @@ export class RoleAdminController {
     })
     @RoleUpdateGuard()
     @RequestParamGuard(RoleRequestDto)
-    @AuthPermissionProtected(
-        ENUM_AUTH_PERMISSIONS.ROLE_READ,
-        ENUM_AUTH_PERMISSIONS.ROLE_UPDATE
-    )
     @AuthJwtAdminAccessProtected()
     @Put('/:role')
     async update(
@@ -251,10 +239,6 @@ export class RoleAdminController {
     })
     @RoleUpdateGuard()
     @RequestParamGuard(RoleRequestDto)
-    @AuthPermissionProtected(
-        ENUM_AUTH_PERMISSIONS.ROLE_READ,
-        ENUM_AUTH_PERMISSIONS.ROLE_UPDATE
-    )
     @AuthJwtAdminAccessProtected()
     @Put('/:role/permission')
     async updatePermission(
@@ -295,10 +279,6 @@ export class RoleAdminController {
     @Response('role.delete')
     @RoleDeleteGuard()
     @RequestParamGuard(RoleRequestDto)
-    @AuthPermissionProtected(
-        ENUM_AUTH_PERMISSIONS.ROLE_READ,
-        ENUM_AUTH_PERMISSIONS.ROLE_DELETE
-    )
     @AuthJwtAdminAccessProtected()
     @Delete('/:role')
     async delete(@GetRole() role: Role): Promise<void> {
@@ -319,11 +299,6 @@ export class RoleAdminController {
     @Response('role.inactive')
     @RoleUpdateInactiveGuard()
     @RequestParamGuard(RoleRequestDto)
-    @AuthPermissionProtected(
-        ENUM_AUTH_PERMISSIONS.ROLE_READ,
-        ENUM_AUTH_PERMISSIONS.ROLE_UPDATE,
-        ENUM_AUTH_PERMISSIONS.ROLE_INACTIVE
-    )
     @AuthJwtAdminAccessProtected()
     @Patch('/:role/inactive')
     async inactive(@GetRole() role: Role): Promise<void> {
@@ -344,11 +319,6 @@ export class RoleAdminController {
     @Response('role.active')
     @RoleUpdateActiveGuard()
     @RequestParamGuard(RoleRequestDto)
-    @AuthPermissionProtected(
-        ENUM_AUTH_PERMISSIONS.ROLE_READ,
-        ENUM_AUTH_PERMISSIONS.ROLE_UPDATE,
-        ENUM_AUTH_PERMISSIONS.ROLE_ACTIVE
-    )
     @AuthJwtAdminAccessProtected()
     @Patch('/:role/active')
     async active(@GetRole() role: Role): Promise<void> {
@@ -367,7 +337,6 @@ export class RoleAdminController {
 
     @RoleAccessForDoc()
     @Response('role.accessFor', { serialization: RoleAccessForSerialization })
-    @AuthPermissionProtected(ENUM_AUTH_PERMISSIONS.ROLE_READ)
     @AuthJwtAdminAccessProtected()
     @Get('/access-for')
     async accessFor(): Promise<IResponse> {

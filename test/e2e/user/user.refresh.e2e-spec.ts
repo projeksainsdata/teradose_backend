@@ -16,7 +16,7 @@ import { ENUM_ROLE_STATUS_CODE_ERROR } from 'src/modules/role/constants/role.sta
 import { RoleModule } from 'src/modules/role/role.module';
 import { PermissionModule } from 'src/modules/permission/permission.module';
 import { Role, User } from '@prisma/client';
-import { randomUUID } from 'crypto';
+import { GenerateUUID } from 'src/common/databases/constants/database.function.constant';
 
 describe('E2E User Refresh', () => {
     let app: INestApplication;
@@ -63,7 +63,7 @@ describe('E2E User Refresh', () => {
         helperDateService = app.get(HelperDateService);
 
         role = await roleService.findOneByName('user');
-
+        console.log(role);
         passwordExpired = helperDateService.backwardInDays(5);
         passwordExpiredForward = helperDateService.forwardInDays(5);
 
@@ -94,7 +94,7 @@ describe('E2E User Refresh', () => {
         );
         const payloadNotFound = {
             ...payload,
-            id: `${randomUUID()}`,
+            id: `${GenerateUUID()}`,
         };
 
         refreshToken = await authService.createRefreshToken(payload, {

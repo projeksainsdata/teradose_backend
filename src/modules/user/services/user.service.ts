@@ -106,7 +106,7 @@ export class UserService implements IUserService {
         email: string,
         options?: Prisma.UserFindUniqueOrThrowArgs
     ): Promise<boolean> {
-        const user = await this.prismaService.user.findUniqueOrThrow({
+        const user = await this.prismaService.user.findUnique({
             where: { email },
             ...options,
         });

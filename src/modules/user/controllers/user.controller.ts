@@ -84,33 +84,11 @@ export class UserController {
             });
         }
 
-        const passwordAttempt: boolean =
-            await this.settingService.getPasswordAttempt();
-        const maxPasswordAttempt: number =
-            await this.settingService.getMaxPasswordAttempt();
-        if (passwordAttempt && user.passwordAttempt >= maxPasswordAttempt) {
-            throw new ForbiddenException({
-                statusCode:
-                    ENUM_USER_STATUS_CODE_ERROR.USER_PASSWORD_ATTEMPT_MAX_ERROR,
-                message: 'user.error.passwordAttemptMax',
-            });
-        }
-
         const validate: boolean = await this.authService.validateUser(
             password,
             user.password
         );
         if (!validate) {
-            try {
-                await this.userService.increasePasswordAttempt(user.id);
-            } catch (err: any) {
-                throw new InternalServerErrorException({
-                    statusCode: ENUM_ERROR_STATUS_CODE_ERROR.ERROR_UNKNOWN,
-                    message: 'http.serverError.internalServerError',
-                    _error: err.message,
-                });
-            }
-
             throw new BadRequestException({
                 statusCode:
                     ENUM_USER_STATUS_CODE_ERROR.USER_PASSWORD_NOT_MATCH_ERROR,

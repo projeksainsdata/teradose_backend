@@ -25,7 +25,7 @@ export class AuthPayloadAccessForGuard implements CanActivate {
             );
 
         const { user } = context.switchToHttp().getRequest();
-        const { accessFor } = user;
+        const accessFor = user.roles.accessFor;
 
         if (!requiredFor || accessFor === ENUM_AUTH_ACCESS_FOR.SUPER_ADMIN) {
             return true;
