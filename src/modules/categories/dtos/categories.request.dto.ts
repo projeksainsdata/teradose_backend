@@ -13,3 +13,15 @@ export class CategoriesRequestDto {
     @Type(() => String)
     categories: string;
 }
+
+export class CategoriesSlugRequestDto {
+    @ApiProperty({
+        name: 'slug',
+        description: 'slug',
+        required: true,
+        nullable: false,
+    })
+    @IsNotEmpty()
+    @Type(() => String)
+    slug: string;
+}

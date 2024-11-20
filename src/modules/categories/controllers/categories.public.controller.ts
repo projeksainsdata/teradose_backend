@@ -1,7 +1,10 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { categories } from '@prisma/client';
-import { PaginationQuery } from 'src/common/pagination/decorators/pagination.decorator';
+import {
+    PaginationQuery,
+    PaginationQueryFilterInEnum,
+} from 'src/common/pagination/decorators/pagination.decorator';
 import { PaginationListDto } from 'src/common/pagination/dtos/pagination.list.dto';
 import { PaginationService } from 'src/common/pagination/services/pagination.service';
 import { RequestParamGuard } from 'src/common/request/decorators/request.decorator';
@@ -17,6 +20,7 @@ import {
 import { GetCategories } from 'src/modules/categories/decorators/categories.decorator';
 import {
     CategoryGetDoc,
+    CategoryGetSlugDoc,
     CategoryListDoc,
 } from 'src/modules/categories/docs/categories.doc';
 import { CategoriesServices } from '../services/categories.service';
@@ -29,8 +33,19 @@ import {
     CATEGORY_DEFAULT_AVAILABLE_ORDER_BY,
 } from '../constants/categories.list.constant';
 import { CategoryGetSerialization } from '../serializations/categories.get.serialization';
-import { CategoriesRequestDto } from '../dtos/categories.request.dto';
-import { CategoriesGetGuard } from '../decorators/categories.admin.decorator';
+import {
+    CategoriesRequestDto,
+    CategoriesSlugRequestDto,
+} from '../dtos/categories.request.dto';
+import {
+    CategoriesGetGuard,
+    CategoriesSlugGuard,
+} from '../decorators/categories.admin.decorator';
+import { PaginationFilterInEnumPipe } from 'src/common/pagination/pipes/pagination.filter-in-enum.pipe';
+import {
+    CATEGORY_TYPE_LIST,
+    ENUM_CATEGORY_TYPE,
+} from '../constants/categories.enum.constant';
 
 @ApiTags('modules.public.categories')
 @Controller({
@@ -56,10 +71,17 @@ export class CategoriesPublicController {
             CATEGORY_DEFAULT_AVAILABLE_SEARCH,
             CATEGORY_DEFAULT_AVAILABLE_ORDER_BY
         )
-        { _search, _limit, _offset, _order }: PaginationListDto
+        { _search, _limit, _offset, _order }: PaginationListDto,
+        @PaginationQueryFilterInEnum(
+            'type',
+            CATEGORY_TYPE_LIST,
+            ENUM_CATEGORY_TYPE
+        )
+        type: Record<string, any>
     ): Promise<IResponsePaging> {
         const find: Record<string, any> = {
             ..._search,
+            ...type,
         };
 
         const categoriesList: categories[] =
@@ -89,6 +111,19 @@ export class CategoriesPublicController {
     @RequestParamGuard(CategoriesRequestDto)
     @Get('/:categories')
     async get(
+        @GetCategories(false) categories: categories
+    ): Promise<IResponse> {
+        return { data: categories };
+    }
+
+    @CategoryGetSlugDoc()
+    @Response('categories.slug', {
+        serialization: CategoryGetSerialization,
+    })
+    @CategoriesSlugGuard()
+    @RequestParamGuard(CategoriesSlugRequestDto)
+    @Get('/:slug')
+    async slug(
         @GetCategories(false) categories: categories
     ): Promise<IResponse> {
         return { data: categories };

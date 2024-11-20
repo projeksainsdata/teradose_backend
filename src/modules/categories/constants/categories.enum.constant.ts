@@ -8,3 +8,5 @@ export const ENUM_CATEGORY_TYPE = {
 };
 
 export type ENUM_CATEGORY_TYPE = CATEGORY_TYPE;
+
+export const CATEGORY_TYPE_LIST = Object.values(CATEGORY_TYPE);

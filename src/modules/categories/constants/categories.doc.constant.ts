@@ -1,7 +1,5 @@
 import { faker } from '@faker-js/faker';
-import {
-    ENUM_CATEGORY_TYPE,
-} from 'src/modules/categories/constants/categories.enum.constant';
+import { ENUM_CATEGORY_TYPE } from 'src/modules/categories/constants/categories.enum.constant';
 
 export const CATEGORY_DOC_QUERY_TYPE = [
     {
@@ -21,8 +19,6 @@ export const CATEGORY_DOC_QUERY_SEARCH = [
     },
 ];
 
-
-
 export const CategoriesDocParamsGet = [
     {
         name: 'categories',
@@ -30,5 +26,15 @@ export const CategoriesDocParamsGet = [
         required: true,
         type: 'string',
         example: faker.string.uuid(),
+    },
+];
+
+export const CategoriesDocParamsSlug = [
+    {
+        name: 'slug',
+        allowEmptyValue: false,
+        required: true,
+        type: 'string',
+        example: faker.helpers.slugify(faker.person.zodiacSign()),
     },
 ];

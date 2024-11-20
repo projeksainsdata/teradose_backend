@@ -59,6 +59,10 @@ import { CategoriesUpdateDto } from '../dtos/categories.update.dto';
 import { CategoriesCreateDto } from '../dtos/categories.create.dto';
 import { ENUM_CATEGORIES_STATUS_CODE_ERROR } from '../constants/categoties.status-code.constant';
 import { HelperStringService } from 'src/common/helper/services/helper.string.service';
+import {
+    CATEGORY_TYPE_LIST,
+    ENUM_CATEGORY_TYPE,
+} from '../constants/categories.enum.constant';
 
 @ApiTags('modules.admin.categories')
 @Controller({
@@ -85,12 +89,18 @@ export class CategoriesAdminController {
             CATEGORY_DEFAULT_AVAILABLE_SEARCH,
             CATEGORY_DEFAULT_AVAILABLE_ORDER_BY
         )
-        { _search, _limit, _offset, _order }: PaginationListDto
+        { _search, _limit, _offset, _order }: PaginationListDto,
+        @PaginationQueryFilterInEnum(
+            'type',
+            CATEGORY_TYPE_LIST,
+            ENUM_CATEGORY_TYPE
+        )
+        type: Record<string, any>
     ): Promise<IResponsePaging> {
         const find: Record<string, any> = {
             ..._search,
+            ...type,
         };
-
         const categoriesList: categories[] =
             await this.categoriesService.findAll(find, {
                 orderBy: _order,
@@ -117,7 +127,9 @@ export class CategoriesAdminController {
     @CategoriesGetGuard()
     @RequestParamGuard(CategoriesRequestDto)
     @Get('/:categories')
-    async get(@GetCategories(false) categories: categories): Promise<IResponse> {
+    async get(
+        @GetCategories(false) categories: categories
+    ): Promise<IResponse> {
         return { data: categories };
     }
 

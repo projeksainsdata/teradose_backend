@@ -5,6 +5,7 @@ import { CategoryGetSerialization } from '../serializations/categories.get.seria
 import { CategoriesListSerialization } from '../serializations/categories.list.serialization';
 import {
     CategoriesDocParamsGet,
+    CategoriesDocParamsSlug,
     CATEGORY_DOC_QUERY_SEARCH,
     CATEGORY_DOC_QUERY_TYPE,
 } from '../constants/categories.doc.constant';
@@ -43,6 +44,19 @@ export function CategoryGetDoc(): MethodDecorator {
         Doc<CategoryGetSerialization>('category.get', {
             request: {
                 params: CategoriesDocParamsGet,
+            },
+            response: {
+                serialization: CategoryGetSerialization,
+            },
+        })
+    );
+}
+
+export function CategoryGetSlugDoc(): MethodDecorator {
+    return applyDecorators(
+        Doc<CategoryGetSerialization>('category.get', {
+            request: {
+                params: CategoriesDocParamsSlug,
             },
             response: {
                 serialization: CategoryGetSerialization,
