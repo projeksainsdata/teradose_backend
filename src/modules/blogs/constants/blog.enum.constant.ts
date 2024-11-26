@@ -1,0 +1,11 @@
+export enum ENUM_BLOG_STATUS {
+    DRAFT = 'DRAFT',
+    PUBLISHED = 'PUBLISHED',
+    ARCHIVED = 'ARCHIVED',
+}
+
+export const ENUM_BLOG_STATUS_LIST = {
+    ...ENUM_BLOG_STATUS,
+};
+
+export type ENUM_BLOG_STATUS_LIST = ENUM_BLOG_STATUS;

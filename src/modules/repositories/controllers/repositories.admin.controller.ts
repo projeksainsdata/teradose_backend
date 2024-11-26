@@ -145,21 +145,18 @@ export class RepositoryAdminController {
     @RepositoryCategoriesExist()
     @Post('/')
     async create(@Body() dto: RepositoryCreateDto): Promise<IResponse> {
+        const isExist = await this.repositoryService.existBytitle(dto.title);
+        if (isExist) {
+            throw new ConflictException({
+                statusCode:
+                    ENUM_REPOSITORIES_STATUS_CODE_ERROR.REPOSITORIES_EXIST_ERROR,
+                message: 'repositories.error.exist',
+            });
+        }
+
+        // Generate slug from title
+        dto.slug = this.helperStringService.convertToSlug(dto.title);
         try {
-            const isExist = await this.repositoryService.existBytitle(
-                dto.title
-            );
-            if (isExist) {
-                throw new ConflictException({
-                    statusCode:
-                        ENUM_REPOSITORIES_STATUS_CODE_ERROR.REPOSITORIES_EXIST_ERROR,
-                    message: 'repositories.error.exist',
-                });
-            }
-
-            // Generate slug from title
-            dto.slug = this.helperStringService.convertToSlug(dto.title);
-
             const created = await this.repositoryService.create(dto);
             return { data: { id: created.id } };
         } catch (error: any) {

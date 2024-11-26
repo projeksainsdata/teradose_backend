@@ -1,4 +1,4 @@
-import {  PickType } from '@nestjs/swagger';
+import { PickType } from '@nestjs/swagger';
 import { CategoriesCreateDto } from './categories.create.dto';
 import { Exclude } from 'class-transformer';
 
