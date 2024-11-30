@@ -14,7 +14,10 @@ import {
 import { BlogsService } from '../services/blog.service';
 import { GetBlog } from '../decorators/blog.decorator';
 import { RequestParamGuard } from 'src/common/request/decorators/request.decorator';
-import { BlogRequestDto } from '../dtos/blog.request.dto';
+import {
+    BlogRequestCategoryDto,
+    BlogRequestIdDto,
+} from '../dtos/blog.request.dto';
 import {
     BLOG_DEFAULT_AVAILABLE_ORDER_BY,
     BLOG_DEFAULT_ORDER_BY,
@@ -34,6 +37,7 @@ import {
     BlogPublicGetDoc,
     BlogPublicListDoc,
 } from '../docs/blog.public.doc';
+import { BlogGetGuard } from '../decorators/blog.admin.decorator';
 
 @ApiTags('modules.public.blog')
 @Controller({
@@ -80,7 +84,19 @@ export class BlogsPublicController {
             take: _limit,
             orderBy: _order,
             include: {
-                categories: true,
+                categories: {
+                    select: {
+                        id: true,
+                        name: true,
+                        slug: true,
+                    },
+                },
+                user: {
+                    select: {
+                        id: true,
+                        fullName: true,
+                    },
+                },
             },
         });
 
@@ -95,16 +111,31 @@ export class BlogsPublicController {
 
     @BlogPublicGetDoc()
     @Response('blog.get', { serialization: BlogGetSerialization })
-    @RequestParamGuard(BlogRequestDto)
+    @BlogGetGuard()
+    @RequestParamGuard(BlogRequestIdDto)
     @Get('/:blogs')
     async get(@GetBlog() blog: Blogs): Promise<IResponse> {
-        return {
-            data: blog,
-        };
+        // join categories and user
+        const dataJoin = await this.blogService.findOneById(blog.id, {
+            include: {
+                categories: true,
+                user: {
+                    select: {
+                        id: true,
+                        fullName: true,
+                        email: true,
+                        jobTitle: true,
+                    },
+                },
+            },
+            where: { id: blog.id },
+        });
+        return { data: dataJoin };
     }
 
     @BlogPublicCategoryDoc()
-    @Response('blog.category')
+    @Response('blog.category', { serialization: BlogListSerialization })
+    @RequestParamGuard(BlogRequestCategoryDto)
     @Get('/category/:categoryId')
     async getByCategory(
         @Param('categoryId') categoryId: string,

@@ -15,7 +15,6 @@ export function RepositoryPublicListDoc(): MethodDecorator {
         DocPaging<RepositoryListSerialization>('repository.public.list', {
             request: {
                 queries: [
-                    ...RepostoriesDocQueryStatus,
                     ...RepositoryDocQueryCategoryName,
                 ],
             },

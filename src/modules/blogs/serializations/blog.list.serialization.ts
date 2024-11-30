@@ -49,4 +49,19 @@ export class BlogListSerialization {
         id: string;
         name: string;
     };
+
+    // join users table
+    @ApiProperty({
+        description: 'Blog author',
+        example: {
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            fullName: 'John Doe',
+        },
+    })
+    @IsOptional()
+    @Type(() => Object)
+    readonly user?: {
+        id: string;
+        fullName: string;
+    };
 }

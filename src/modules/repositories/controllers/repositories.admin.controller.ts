@@ -53,6 +53,7 @@ import {
 import {
     ENUM_REPOSITORIES_STATUS,
     ENUM_REPOSITORIES_STATUS_LIST,
+    ENUM_REPOSITORIES_TYPE,
 } from '../constants/repositories.enum.constant';
 import { RepositoryListSerialization } from '../serializations/repositories.list.serialization';
 import { RepositoryGetSerialization } from '../serializations/repositories.get.serialization';
@@ -100,7 +101,7 @@ export class RepositoryAdminController {
         joinSearch: Record<string, any>,
         @PaginationQueryFilterInEnum(
             'status',
-            ENUM_REPOSITORIES_STATUS,
+            ENUM_REPOSITORIES_TYPE,
             ENUM_REPOSITORIES_STATUS_LIST
         )
         status: Record<string, any>
@@ -136,9 +137,27 @@ export class RepositoryAdminController {
     @RequestParamGuard(RepositoryRequestDto)
     @Get('/:repositories')
     async get(@GetRepository() repository: Repositories): Promise<IResponse> {
-        return { data: repository };
-    }
+        const joinData = await this.repositoryService.findOne(
+            {
+                id: repository.id,
+            },
+            {
+                include: {
+                    categories: {
+                        select: {
+                            id: true,
+                            name: true,
+                            slug: true,
+                        },
+                    },
+                },
+            }
+        );
 
+        return {
+            data: joinData,
+        };
+    }
     @RepositoryCreateDoc()
     @Response('repository.create')
     @AuthJwtAdminAccessProtected()

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ENUM_STATUS } from '@prisma/client';
+import { categories, ENUM_STATUS, User } from '@prisma/client';
 import { Type } from 'class-transformer';
 import { BlogListSerialization } from './blog.list.serialization';
 
@@ -34,4 +34,31 @@ export class BlogGetSerialization extends BlogListSerialization {
     })
     @Type(() => Date)
     readonly updatedAt: Date;
+
+    // join categories table
+    @ApiProperty({
+        description: 'Blog categories',
+        example: [
+            {
+                id: '123e4567-e89b-12d3-a456-426614174000',
+                name: 'Programming',
+            },
+        ],
+    })
+    readonly categories: categories;
+
+    // join users table
+    @ApiProperty({
+        description: 'Blog author',
+        example: {
+            // fullName String @db.VarChar(100)
+            // email    String @unique @db.VarChar(100)
+            // jobTitle String
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            fullName: 'John Doe',
+            email: 'john@mail.com',
+            jobTitle: 'Software Engineer',
+        },
+    })
+    readonly user?: User;
 }

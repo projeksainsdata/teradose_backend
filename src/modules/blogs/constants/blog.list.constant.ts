@@ -8,7 +8,6 @@ export const BLOG_DEFAULT_PER_PAGE = 20;
 export const BLOG_DEFAULT_AVAILABLE_ORDER_BY = [
     'title',
     'createdAt',
-    'status',
 ];
 export const BLOG_DEFAULT_AVAILABLE_SEARCH = ['title', 'description'];
 export const BLOG_DEFAULT_STATUS = Object.values(ENUM_BLOG_STATUS_LIST);

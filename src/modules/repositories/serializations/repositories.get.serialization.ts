@@ -1,6 +1,6 @@
 // src/modules/repository/serializations/repositories.get.serialization.ts
 import { ApiProperty } from '@nestjs/swagger';
-import { ENUM_STATUS } from '@prisma/client';
+import { categories, ENUM_STATUS } from '@prisma/client';
 import { Type } from 'class-transformer';
 import { RepositoryListSerialization } from './repositories.list.serialization';
 
@@ -29,4 +29,16 @@ export class RepositoryGetSerialization extends RepositoryListSerialization {
     })
     @Type(() => Date)
     readonly updatedAt: Date;
+
+    // join categories table
+    @ApiProperty({
+        description: 'Repository categories',
+        example: [
+            {
+                id: '123e4567-e89b-12d3-a456-426614174000',
+                name: 'Medication',
+            },
+        ],
+    })
+    readonly categories: categories;
 }

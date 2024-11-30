@@ -1,41 +1,41 @@
-import { faker } from '@faker-js/faker';
-import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { ApiProperty } from "@nestjs/swagger";
 
+// aws.serialization.ts
 export class AwsS3Serialization {
     @ApiProperty({
-        example: faker.system.directoryPath(),
+        description: 'Base path in S3 bucket',
+        example: 'uploads/images',
     })
-    @Type(() => String)
     path: string;
 
     @ApiProperty({
-        example: faker.system.filePath(),
+        description: 'Full path including filename',
+        example: 'uploads/images/example-123.png',
     })
-    @Type(() => String)
     pathWithFilename: string;
 
     @ApiProperty({
-        example: faker.system.fileName(),
+        description: 'Original filename',
+        example: 'example-123.png',
     })
-    @Type(() => String)
     filename: string;
 
     @ApiProperty({
-        example: `${faker.internet.url()}/${faker.system.filePath()}`,
+        description: 'Complete S3 URL',
+        example:
+            'https://bucket-name.s3.amazonaws.com/uploads/images/example-123.png',
     })
-    @Type(() => String)
     completedUrl: string;
 
     @ApiProperty({
-        example: faker.internet.url(),
+        description: 'S3 bucket base URL',
+        example: 'https://bucket-name.s3.amazonaws.com',
     })
-    @Type(() => String)
     baseUrl: string;
 
     @ApiProperty({
-        example: faker.system.mimeType(),
+        description: 'File mime type',
+        example: 'image/png',
     })
-    @Type(() => String)
     mime: string;
 }

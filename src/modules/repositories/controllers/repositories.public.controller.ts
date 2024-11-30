@@ -99,8 +99,19 @@ export class RepositoriesPublicController {
     @RequestParamGuard(RepositoryRequestDto)
     @Get('/:repositories')
     async get(@GetRepository() repository: Repositories): Promise<IResponse> {
+        const joinData = await this.repositoryService.findOne(
+            {
+                id: repository.id,
+            },
+            {
+                include: {
+                    categories: true,
+                },
+            }
+        );
+
         return {
-            data: repository,
+            data: joinData,
         };
     }
     @RepositoryPublicCategoryDoc()

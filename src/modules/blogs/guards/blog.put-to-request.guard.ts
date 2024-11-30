@@ -10,10 +10,9 @@ export class BlogPutToRequestGuard implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
         const { params } = request;
-        const { blog } = params;
+        const { blogs } = params;
 
-        const check: Blogs =
-            await this.blogService.findOneById(blog);
+        const check: Blogs = await this.blogService.findOneById(blogs);
         request.__blog = check;
 
         return true;

@@ -33,7 +33,7 @@ export const BlogDocQueryCategoryName = [
 
 export const BlogDocParamsGet = [
     {
-        name: 'blog',
+        name: 'blogs',
         allowEmptyValue: false,
         required: true,
         type: 'string',

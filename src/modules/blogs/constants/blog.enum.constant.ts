@@ -9,3 +9,5 @@ export const ENUM_BLOG_STATUS_LIST = {
 };
 
 export type ENUM_BLOG_STATUS_LIST = ENUM_BLOG_STATUS;
+
+export const ENUM_BLOG_STATUS_TYPE = Object.values(ENUM_BLOG_STATUS);

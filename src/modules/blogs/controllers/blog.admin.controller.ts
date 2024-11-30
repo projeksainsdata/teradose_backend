@@ -29,7 +29,7 @@ import {
 } from 'src/common/response/interfaces/response.interface';
 import { BlogsService } from '../services/blog.service';
 import { BlogCreateDto } from '../dtos/blog.create.dto';
-import { BlogRequestDto } from '../dtos/blog.request.dto';
+import { BlogRequestIdDto } from '../dtos/blog.request.dto';
 import { BlogUpdateDto } from '../dtos/blog.update.dto';
 import { GetBlog } from '../decorators/blog.decorator';
 import {
@@ -56,6 +56,7 @@ import {
 import {
     ENUM_BLOG_STATUS,
     ENUM_BLOG_STATUS_LIST,
+    ENUM_BLOG_STATUS_TYPE,
 } from '../constants/blog.enum.constant';
 import { BlogListSerialization } from '../serializations/blog.list.serialization';
 import { BlogGetSerialization } from '../serializations/blog.get.serialization';
@@ -103,7 +104,7 @@ export class BlogAdminController {
         joinSearch: Record<string, any>,
         @PaginationQueryFilterInEnum(
             'status',
-            ENUM_BLOG_STATUS,
+            ENUM_BLOG_STATUS_TYPE,
             ENUM_BLOG_STATUS_LIST
         )
         status: Record<string, any>
@@ -113,13 +114,24 @@ export class BlogAdminController {
             ...joinSearch._joins,
             ...status,
         };
-
         const blogs = await this.blogService.findAll(find, {
             skip: _offset,
             take: _limit,
             orderBy: _order,
             include: {
-                categories: true,
+                categories: {
+                    select: {
+                        id: true,
+                        name: true,
+                        slug: true,
+                    },
+                },
+                user: {
+                    select: {
+                        id: true,
+                        fullName: true,
+                    },
+                },
             },
         });
 
@@ -136,10 +148,25 @@ export class BlogAdminController {
     @Response('blog.get', { serialization: BlogGetSerialization })
     @AuthJwtAdminAccessProtected()
     @BlogGetGuard()
-    @RequestParamGuard(BlogRequestDto)
-    @Get('/:blog')
+    @RequestParamGuard(BlogRequestIdDto)
+    @Get('/:blogs')
     async get(@GetBlog() blog: Blogs): Promise<IResponse> {
-        return { data: blog };
+        // join categories and user
+        const dataJoin = await this.blogService.findOneById(blog.id, {
+            include: {
+                categories: true,
+                user: {
+                    select: {
+                        id: true,
+                        fullName: true,
+                        email: true,
+                        jobTitle: true,
+                    },
+                },
+            },
+            where: { id: blog.id },
+        });
+        return { data: dataJoin };
     }
 
     @BlogCreateDoc()
@@ -179,8 +206,8 @@ export class BlogAdminController {
     })
     @AuthJwtAdminAccessProtected()
     @BlogGetGuard()
-    @RequestParamGuard(BlogRequestDto)
-    @Put('/:blog')
+    @RequestParamGuard(BlogRequestIdDto)
+    @Put('/:blogs')
     async update(
         @GetBlog() blog: Blogs,
         @Body() dto: BlogUpdateDto
@@ -189,7 +216,6 @@ export class BlogAdminController {
             const updated = await this.blogService.update(blog.id, dto);
             return { data: { id: updated.id } };
         } catch (error: any) {
-            console.log(error);
             throw new InternalServerErrorException({
                 statusCode: ENUM_ERROR_STATUS_CODE_ERROR.ERROR_UNKNOWN,
                 message: 'http.serverError.internalServerError',
@@ -204,8 +230,8 @@ export class BlogAdminController {
     })
     @AuthJwtAdminAccessProtected()
     @BlogGetGuard()
-    @RequestParamGuard(BlogRequestDto)
-    @Patch('/:blog/status')
+    @RequestParamGuard(BlogRequestIdDto)
+    @Patch('/:blogs/status')
     async updateStatus(
         @GetBlog() blog: Blogs,
         @Body() status: BlogUpdateStatusDto
@@ -226,8 +252,8 @@ export class BlogAdminController {
     @Response('blog.delete')
     @AuthJwtAdminAccessProtected()
     @BlogGetGuard()
-    @RequestParamGuard(BlogRequestDto)
-    @Delete('/:blog')
+    @RequestParamGuard(BlogRequestIdDto)
+    @Delete('/:blogs')
     async delete(@GetBlog() blog: Blogs): Promise<void> {
         await this.blogService.delete(blog.id);
         return;

@@ -54,4 +54,44 @@ export class RepositoryCreateDto extends RepositoryBaseDto {
     @IsString()
     @MaxLength(255)
     slug?: string;
+
+    @ApiProperty({
+        description: 'Attention information',
+        example: 'Do not exceed recommended dose',
+        required: false,
+    })
+    @IsOptional()
+    @IsString()
+    @MaxLength(255)
+    readonly attention?: string;
+
+    @ApiProperty({
+        description: 'Contraindication information',
+        example: 'Not for children under 12 years',
+        required: false,
+    })
+    @IsOptional()
+    @IsString()
+    @MaxLength(255)
+    readonly contraindication?: string;
+
+    @ApiProperty({
+        description: 'Side effect information',
+        example: 'May cause drowsiness',
+        required: false,
+    })
+    @IsOptional()
+    @IsString()
+    @MaxLength(255)
+    readonly side_effect?: string;
+
+    @ApiProperty({
+        description: 'Product categories',
+        example: 'Pain relief',
+        required: false,
+    })
+    @IsOptional()
+    @IsString()
+    @MaxLength(255)
+    readonly product_categories?: string;
 }
