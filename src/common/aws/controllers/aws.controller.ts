@@ -29,6 +29,10 @@ import {
     S3FileNotFoundException,
     S3OperationException,
 } from '../exceptions/aws.exception';
+import { UploadFileSingle } from 'src/common/file/decorators/file.decorator';
+import { FileTypeImagePipe } from 'src/common/file/pipes/file.type.pipe';
+import { FileSizeImagePipe } from 'src/common/file/pipes/file.size.pipe';
+import { FileRequiredPipe } from 'src/common/file/pipes/file.required.pipe';
 
 @ApiTags('AWS S3')
 @Controller('aws/s3')
@@ -37,12 +41,13 @@ export class AwsS3Controller {
 
     @Post('upload')
     @AwsS3UploadDoc()
-    @UseInterceptors(FileInterceptor('file'))
+    @UploadFileSingle('file')
     @Response('aws.upload', {
         serialization: AwsS3Serialization,
     })
     async uploadFile(
-        @UploadedFile() file: Multer.File,
+        @UploadedFile(FileRequiredPipe, FileSizeImagePipe, FileTypeImagePipe)
+        file: Multer.File,
         @Body() body: { path?: string }
     ) {
         try {

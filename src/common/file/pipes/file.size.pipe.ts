@@ -53,11 +53,15 @@ export class FileSizeImagePipe implements PipeTransform {
         if (size > maxSizeInBytes) {
             throw new PayloadTooLargeException({
                 statusCode: ENUM_FILE_STATUS_CODE_ERROR.FILE_MAX_SIZE_ERROR,
-                message: 'file.error.maxSize',
+                message: `The file size exceeds the maximum allowed size of ${this.convertBytesToMB(this.maxSize)} MB. Please upload a smaller file.`,
             });
         }
 
         return;
+    }
+
+    private convertBytesToMB(bytes: number): number {
+        return bytes / (1024 * 1024);
     }
 }
 
@@ -99,11 +103,15 @@ export class FileSizeExcelPipe implements PipeTransform {
         if (size > maxSizeInBytes) {
             throw new PayloadTooLargeException({
                 statusCode: ENUM_FILE_STATUS_CODE_ERROR.FILE_MAX_SIZE_ERROR,
-                message: 'file.error.maxSize',
+                message: `The file size exceeds the maximum allowed size of ${this.convertBytesToMB(this.maxSize)} MB. Please upload a smaller file.`,
             });
         }
 
         return;
+    }
+
+    private convertBytesToMB(bytes: number): number {
+        return bytes / (1024 * 1024);
     }
 }
 
@@ -145,11 +153,15 @@ export class FileSizeVideoPipe implements PipeTransform {
         if (size > maxSizeInBytes) {
             throw new PayloadTooLargeException({
                 statusCode: ENUM_FILE_STATUS_CODE_ERROR.FILE_MAX_SIZE_ERROR,
-                message: 'file.error.maxSize',
+                message: `The file size exceeds the maximum allowed size of ${this.convertBytesToMB(this.maxSize)} MB. Please upload a smaller file.`,
             });
         }
 
         return;
+    }
+
+    private convertBytesToMB(bytes: number): number {
+        return bytes / (1024 * 1024);
     }
 }
 
@@ -191,10 +203,14 @@ export class FileSizeAudioPipe implements PipeTransform {
         if (size > maxSizeInBytes) {
             throw new PayloadTooLargeException({
                 statusCode: ENUM_FILE_STATUS_CODE_ERROR.FILE_MAX_SIZE_ERROR,
-                message: 'file.error.maxSize',
+                message: `The file size exceeds the maximum allowed size of ${this.convertBytesToMB(this.maxSize)} MB. Please upload a smaller file.`,
             });
         }
 
         return;
+    }
+
+    private convertBytesToMB(bytes: number): number {
+        return bytes / (1024 * 1024);
     }
 }
