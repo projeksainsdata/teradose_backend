@@ -1,7 +1,10 @@
 import { applyDecorators, HttpStatus } from '@nestjs/common';
 import { ENUM_DOC_REQUEST_BODY_TYPE } from 'src/common/doc/constants/doc.enum.constant';
 import { Doc, DocPaging } from 'src/common/doc/decorators/doc.decorator';
-import { CategoryGetSerialization } from '../serializations/categories.get.serialization';
+import {
+    CategoryGetDataSerialization,
+    CategoryGetSerialization,
+} from '../serializations/categories.get.serialization';
 import { CategoriesListSerialization } from '../serializations/categories.list.serialization';
 import {
     CategoriesDocParamsGet,
@@ -59,7 +62,7 @@ export function CategoryGetSlugDoc(): MethodDecorator {
                 params: CategoriesDocParamsSlug,
             },
             response: {
-                serialization: CategoryGetSerialization,
+                serialization: CategoryGetDataSerialization,
             },
         })
     );
