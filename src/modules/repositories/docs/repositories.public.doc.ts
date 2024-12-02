@@ -6,6 +6,7 @@ import {
     RepositoryDocQueryCategoryName,
     RepostoriesDocQueryStatus,
     RepositoryDocQueryCategory,
+    RepostoriesDocParamsSlug,
 } from '../constants/repositories.doc.constant';
 import { RepositoryListSerialization } from '../serializations/repositories.list.serialization';
 import { RepositoryGetSerialization } from '../serializations/repositories.get.serialization';
@@ -14,9 +15,7 @@ export function RepositoryPublicListDoc(): MethodDecorator {
     return applyDecorators(
         DocPaging<RepositoryListSerialization>('repository.public.list', {
             request: {
-                queries: [
-                    ...RepositoryDocQueryCategoryName,
-                ],
+                queries: [...RepositoryDocQueryCategoryName],
             },
             response: {
                 serialization: RepositoryListSerialization,
@@ -30,6 +29,18 @@ export function RepositoryPublicGetDoc(): MethodDecorator {
         Doc<RepositoryGetSerialization>('repository.public.get', {
             request: {
                 params: RepostoriesDocParamsGet,
+            },
+            response: {
+                serialization: RepositoryGetSerialization,
+            },
+        })
+    );
+}
+export function RepositoryPublicGetSlugDoc(): MethodDecorator {
+    return applyDecorators(
+        Doc<RepositoryGetSerialization>('repository.public.get', {
+            request: {
+                params: RepostoriesDocParamsSlug,
             },
             response: {
                 serialization: RepositoryGetSerialization,

@@ -10,6 +10,11 @@ export function RepositoryGetGuard(): MethodDecorator {
         UseGuards(RepositoryPutToRequestGuard, RepositoryNotFoundGuard)
     );
 }
+export function RepositoryGetSlugGuard():MethodDecorator{
+    return applyDecorators(
+        UseGuards()
+    )
+}
 
 export function RepositoryUpdateGuard(): MethodDecorator {
     return applyDecorators(

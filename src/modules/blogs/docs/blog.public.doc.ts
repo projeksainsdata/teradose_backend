@@ -6,6 +6,7 @@ import {
     BlogDocQueryCategoryName,
     BlogDocQueryStatus,
     BlogDocQueryCategory,
+    BlogDocParamsSlug,
 } from '../constants/blog.doc.constant';
 import { BlogListSerialization } from '../serializations/blog.list.serialization';
 import { BlogGetSerialization } from '../serializations/blog.get.serialization';
@@ -28,6 +29,19 @@ export function BlogPublicGetDoc(): MethodDecorator {
         Doc<BlogGetSerialization>('Blog.public.get', {
             request: {
                 params: BlogDocParamsGet,
+            },
+            response: {
+                serialization: BlogGetSerialization,
+            },
+        })
+    );
+}
+
+export function BlogSlugPublicGetDoc(): MethodDecorator {
+    return applyDecorators(
+        Doc<BlogGetSerialization>('Blog.public.get', {
+            request: {
+                params: BlogDocParamsSlug,
             },
             response: {
                 serialization: BlogGetSerialization,

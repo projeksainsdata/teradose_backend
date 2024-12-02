@@ -16,3 +16,16 @@ export class RepositoryRequestDto {
     @Type(() => String)
     repositories: string;
 }
+
+export class RepositorySlugRequestDto {
+    @ApiProperty({
+        name: 'slug',
+        description: 'Repository slug',
+        required: true,
+        nullable: false,
+        example: 'repo-sitories',
+    })
+    @IsNotEmpty()
+    @Type(() => String)
+    slug: string;
+}

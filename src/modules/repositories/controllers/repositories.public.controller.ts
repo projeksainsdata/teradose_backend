@@ -14,7 +14,10 @@ import {
 import { RepositoriesService } from '../services/repositories.service';
 import { GetRepository } from '../decorators/repositories.decorator';
 import { RequestParamGuard } from 'src/common/request/decorators/request.decorator';
-import { RepositoryRequestDto } from '../dtos/repositories.request.dto';
+import {
+    RepositoryRequestDto,
+    RepositorySlugRequestDto,
+} from '../dtos/repositories.request.dto';
 import {
     REPOSITORIES_DEFAULT_AVAILABLE_ORDER_BY,
     REPOSITORIES_DEFAULT_ORDER_BY,
@@ -33,8 +36,10 @@ import { RepositoryGetSerialization } from '../serializations/repositories.get.s
 import {
     RepositoryPublicCategoryDoc,
     RepositoryPublicGetDoc,
+    RepositoryPublicGetSlugDoc,
     RepositoryPublicListDoc,
 } from '../docs/repositories.public.doc';
+import { RepositoryGetGuard } from '../decorators/repositories.admin.decorator';
 
 @ApiTags('modules.public.repository')
 @Controller({
@@ -96,6 +101,7 @@ export class RepositoriesPublicController {
 
     @RepositoryPublicGetDoc()
     @Response('repository.get', { serialization: RepositoryGetSerialization })
+    @RepositoryGetGuard()
     @RequestParamGuard(RepositoryRequestDto)
     @Get('/:repositories')
     async get(@GetRepository() repository: Repositories): Promise<IResponse> {
@@ -153,6 +159,24 @@ export class RepositoriesPublicController {
         return {
             _pagination: { total, totalPage },
             data: repositories,
+        };
+    }
+
+    @RepositoryPublicGetSlugDoc()
+    @Response('repositories.slug', {
+        serialization: RepositoryGetSerialization,
+    })
+    @RequestParamGuard(RepositorySlugRequestDto)
+    @Get('/slug/:slug')
+    async getBySlug(@Param('slug') slug: string) {
+        const joinData = await this.repositoryService.findOneBySlug(slug, {
+            include: {
+                categories: true,
+            },
+        });
+
+        return {
+            data: joinData,
         };
     }
 }

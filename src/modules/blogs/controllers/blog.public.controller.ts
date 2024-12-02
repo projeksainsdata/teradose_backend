@@ -17,6 +17,7 @@ import { RequestParamGuard } from 'src/common/request/decorators/request.decorat
 import {
     BlogRequestCategoryDto,
     BlogRequestIdDto,
+    BlogRequestSlugDto,
 } from '../dtos/blog.request.dto';
 import {
     BLOG_DEFAULT_AVAILABLE_ORDER_BY,
@@ -36,6 +37,7 @@ import {
     BlogPublicCategoryDoc,
     BlogPublicGetDoc,
     BlogPublicListDoc,
+    BlogSlugPublicGetDoc,
 } from '../docs/blog.public.doc';
 import { BlogGetGuard } from '../decorators/blog.admin.decorator';
 
@@ -173,6 +175,30 @@ export class BlogsPublicController {
         return {
             _pagination: { total, totalPage },
             data: blogs,
+        };
+    }
+
+    @BlogSlugPublicGetDoc()
+    @Response('blog.get.slug', { serialization: BlogGetSerialization })
+    @RequestParamGuard(BlogRequestSlugDto)
+    @Get('/slug/:slug')
+    async getBySlug(@Param('slug') slug: string) {
+        const joinData = await this.blogService.findOneBySlug(slug, {
+            include: {
+                categories: true,
+                user: {
+                    select: {
+                        id: true,
+                        fullName: true,
+                        email: true,
+                        jobTitle: true,
+                    },
+                },
+            },
+        });
+
+        return {
+            data: joinData,
         };
     }
 }
