@@ -111,7 +111,7 @@ model Permission {
   id          String                @id @default(uuid())
   code        String                @unique @db.VarChar(25)
   group       ENUM_PERMISSION_GROUP
-  description String                @db.VarChar(255)
+  description String               
   isActive    Boolean               @default(true)
   createdAt   DateTime              @default(now())
   updatedAt   DateTime              @updatedAt
@@ -143,7 +143,7 @@ model User {
 
   role String @default("USER") @db.VarChar(100)
 
-  password          String    @db.VarChar(255)
+  password          String   
   passwordExpired   DateTime
   passwordCreated   DateTime
   passwordAttempt   Int       @default(0)
@@ -199,10 +199,10 @@ model categories {
 model Blogs {
   id String @id @default(uuid())
 
-  title String @unique @db.VarChar(255)
-  slug  String @unique @db.VarChar(255)
+  title String @unique
+  slug  String @unique 
 
-  thumbnail String @db.VarChar(255)
+  thumbnail String 
 
   content     String @db.Text
   description String @db.Text
@@ -228,23 +228,23 @@ model Blogs {
 model Repositories {
   id String @id @default(uuid())
 
-  title String @unique @db.VarChar(255)
-  slug  String @unique @db.VarChar(255)
+  title String @unique
+  slug  String @unique
 
-  thumbnail String @db.VarChar(255)
+  thumbnail String
 
   description        String? @db.Text
-  indication         String? @db.VarChar(255)
-  composition        String? @db.VarChar(255)
-  dose               String? @db.VarChar(255)
-  usage_guideline    String? @db.VarChar(255)
-  attention          String? @db.VarChar(255)
-  contraindication   String? @db.VarChar(255)
-  side_effect        String? @db.VarChar(255)
-  product_categories String? @db.VarChar(255)
-  no_registration    String? @db.VarChar(255)
+  indication         String? @db.Text
+  composition        String? @db.Text
+  dose               String? @db.Text
+  usage_guideline    String? @db.Text
+  attention          String? @db.Text
+  contraindication   String? @db.Text
+  side_effect        String? @db.Text
+  product_categories String? @db.Text
+  no_registration    String? @db.Text
 
-  category   String     @db.VarChar(100)
+  category   String     
   categories categories @relation(fields: [category], references: [id], onDelete: Cascade)
 
   status    ENUM_STATUS @default(DRAFT)

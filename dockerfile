@@ -30,6 +30,6 @@ RUN npx prisma generate
 USER node
 
 
-EXPOSE 3001
+EXPOSE 3009
 
 CMD ["npm", "run", "start:prod"]
