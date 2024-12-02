@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { categories } from '@prisma/client';
 import {
@@ -32,16 +32,15 @@ import {
     CATEGORY_DEFAULT_AVAILABLE_SEARCH,
     CATEGORY_DEFAULT_AVAILABLE_ORDER_BY,
 } from '../constants/categories.list.constant';
-import { CategoryGetSerialization } from '../serializations/categories.get.serialization';
+import {
+    CategoryGetDataSerialization,
+    CategoryGetSerialization,
+} from '../serializations/categories.get.serialization';
 import {
     CategoriesRequestDto,
     CategoriesSlugRequestDto,
 } from '../dtos/categories.request.dto';
-import {
-    CategoriesGetGuard,
-    CategoriesSlugGuard,
-} from '../decorators/categories.admin.decorator';
-import { PaginationFilterInEnumPipe } from 'src/common/pagination/pipes/pagination.filter-in-enum.pipe';
+import { CategoriesGetGuard } from '../decorators/categories.admin.decorator';
 import {
     CATEGORY_TYPE_LIST,
     ENUM_CATEGORY_TYPE,
@@ -118,14 +117,20 @@ export class CategoriesPublicController {
 
     @CategoryGetSlugDoc()
     @Response('categories.slug', {
-        serialization: CategoryGetSerialization,
+        serialization: CategoryGetDataSerialization,
     })
-    @CategoriesSlugGuard()
     @RequestParamGuard(CategoriesSlugRequestDto)
-    @Get('/:slug')
-    async slug(
-        @GetCategories(false) categories: categories
-    ): Promise<IResponse> {
+    @Get('/slug/:slug')
+    async slug(@Param('slug') slug: string): Promise<IResponse> {
+        const categories = await this.categoriesService.findOne(
+            { slug },
+            {
+                include: {
+                    Blogs: true,
+                    Repositories: true,
+                },
+            }
+        );
         return { data: categories };
     }
 }

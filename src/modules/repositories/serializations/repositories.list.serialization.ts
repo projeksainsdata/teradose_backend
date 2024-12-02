@@ -50,4 +50,11 @@ export class RepositoryListSerialization {
         id: string;
         name: string;
     };
+
+    @ApiProperty({
+        description: 'thumnail repositories',
+        example: 'https://images.unsplash.com/photo-1612838320302-3b3b3b3b3b3b',
+    })
+    @Type(() => String)
+    readonly thumbnail: string;
 }
