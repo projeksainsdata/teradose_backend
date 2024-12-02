@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import { ApiProperty } from '@nestjs/swagger';
 import { CATEGORY_TYPE } from '../constants/categories.enum.constant';
 import { ResponseIdSerialization } from 'src/common/response/serializations/response.id.serialization';
-import { Blogs } from '@prisma/client';
+import { Blogs, Repositories } from '@prisma/client';
 import { BlogListSerialization } from 'src/modules/blogs/serializations/blog.list.serialization';
 import { RepositoryListSerialization } from 'src/modules/repositories/serializations/repositories.list.serialization';
 import { Type } from 'class-transformer';
@@ -61,6 +61,8 @@ export class CategoryGetDataSerialization extends ResponseIdSerialization {
                 title: 'Introduction to TypeScript',
                 slug: 'introduction-to-typescript',
                 createdAt: '2024-03-19T12:00:00Z',
+                thumbnail:
+                    'https://images.unsplash.com/photo-1612838320302-3b3b3b3b3b3b',
                 user: {
                     id: '123e4567-e89b-12d3-a456-426614174000',
                     fullName: 'John Doe',
@@ -68,8 +70,7 @@ export class CategoryGetDataSerialization extends ResponseIdSerialization {
             },
         ],
     })
-    @Type(() => BlogListSerialization)
-    readonly blogs: BlogListSerialization[];
+    readonly blogs: Blogs[];
 
     // join users table
     @ApiProperty({
@@ -80,9 +81,10 @@ export class CategoryGetDataSerialization extends ResponseIdSerialization {
                 title: 'Paracetamol',
                 slug: 'paracetamol',
                 createdAt: '2024-03-19T12:00:00Z',
+                thumbnail:
+                    'https://images.unsplash.com/photo-1612838320302-3b3b3b3b3b3b',
             },
         ],
     })
-    @Type(() => RepositoryListSerialization)
-    readonly repositories: RepositoryListSerialization[];
+    readonly repositories: Repositories[];
 }
