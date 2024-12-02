@@ -2,9 +2,7 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import { faker } from '@faker-js/faker';
-import {
-    E2E_USER_PROFILE_URL,
-} from './user.constant';
+import { E2E_USER_PROFILE_URL } from './user.constant';
 import { RouterModule } from '@nestjs/core';
 import { useContainer } from 'class-validator';
 import { UserService } from 'src/modules/user/services/user.service';
@@ -100,7 +98,6 @@ describe('E2E User', () => {
         try {
             await userService.deleteMany({ id: user.id });
         } catch (e) {}
-
     });
 
     it(`GET ${E2E_USER_PROFILE_URL} Profile Not Found`, async () => {
@@ -122,5 +119,4 @@ describe('E2E User', () => {
         expect(response.status).toEqual(HttpStatus.OK);
         expect(response.body.statusCode).toEqual(HttpStatus.OK);
     });
-
 });

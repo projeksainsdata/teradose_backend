@@ -88,7 +88,9 @@ describe('E2E Setting Admin', () => {
 
     it(`PUT ${E2E_SETTING_ADMIN_UPDATE_URL} Update Not Found`, async () => {
         const response = await request(app.getHttpServer())
-            .put(E2E_SETTING_ADMIN_UPDATE_URL.replace(':id', `${GenerateUUID()}`))
+            .put(
+                E2E_SETTING_ADMIN_UPDATE_URL.replace(':id', `${GenerateUUID()}`)
+            )
             .set('Authorization', `Bearer ${accessToken}`)
             .set('x-permission-token', permissionToken)
             .send({ value: 'true', type: ENUM_SETTING_DATA_TYPE.BOOLEAN });

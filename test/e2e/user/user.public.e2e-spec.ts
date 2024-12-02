@@ -67,7 +67,6 @@ describe('E2E User Public', () => {
         } catch (err: any) {
             console.error(err);
         }
-
     });
 
     it(`POST ${E2E_USER_PUBLIC_SIGN_UP_URL} Sign Up Error Request`, async () => {
@@ -77,7 +76,6 @@ describe('E2E User Public', () => {
             .send({
                 ...userData,
                 email: 'test',
-
             });
 
         expect(response.status).toEqual(HttpStatus.UNPROCESSABLE_ENTITY);
@@ -109,8 +107,6 @@ describe('E2E User Public', () => {
             ENUM_USER_STATUS_CODE_ERROR.USER_EMAIL_EXIST_ERROR
         );
     });
-
-
 
     it(`DELETE ${E2E_USER_PUBLIC_DELETE_URL} Success`, async () => {
         const user = await userService.findOneByEmail(userData.email);

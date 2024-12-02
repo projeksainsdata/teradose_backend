@@ -77,10 +77,7 @@ describe('E2E Setting', () => {
 
     it(`GET ${E2E_SETTING_COMMON_GET_URL} Get Not Found`, async () => {
         const response = await request(app.getHttpServer()).get(
-            E2E_SETTING_COMMON_GET_URL.replace(
-                ':_id',
-                `${GenerateUUID()}`
-            )
+            E2E_SETTING_COMMON_GET_URL.replace(':_id', `${GenerateUUID()}`)
         );
 
         expect(response.status).toEqual(HttpStatus.NOT_FOUND);

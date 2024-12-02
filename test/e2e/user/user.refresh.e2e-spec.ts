@@ -120,7 +120,6 @@ describe('E2E User Refresh', () => {
         } catch (err: any) {
             console.error(err);
         }
-
     });
 
     it(`POST ${E2E_USER_REFRESH_URL} Not Found`, async () => {

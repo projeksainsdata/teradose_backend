@@ -30,7 +30,15 @@ import { ENUM_PERMISSION_STATUS_CODE_ERROR } from 'src/modules/permission/consta
 import { RoleUpdateNameDto } from 'src/modules/role/dtos/role.update-name.dto';
 import { RoleUpdatePermissionDto } from 'src/modules/role/dtos/role.update-permission.dto';
 import { Permission, Role } from '@prisma/client';
-import { E2E_PERMISSION_ADMIN_ACTIVE_URL, E2E_PERMISSION_ADMIN_CREATE_URL, E2E_PERMISSION_ADMIN_DELETE_URL, E2E_PERMISSION_ADMIN_GET_URL, E2E_PERMISSION_ADMIN_INACTIVE_URL, E2E_PERMISSION_ADMIN_LIST_URL, E2E_PERMISSION_ADMIN_UPDATE_URL } from '../permission/permission.constant';
+import {
+    E2E_PERMISSION_ADMIN_ACTIVE_URL,
+    E2E_PERMISSION_ADMIN_CREATE_URL,
+    E2E_PERMISSION_ADMIN_DELETE_URL,
+    E2E_PERMISSION_ADMIN_GET_URL,
+    E2E_PERMISSION_ADMIN_INACTIVE_URL,
+    E2E_PERMISSION_ADMIN_LIST_URL,
+    E2E_PERMISSION_ADMIN_UPDATE_URL,
+} from '../permission/permission.constant';
 import { GenerateUUID } from 'src/common/databases/constants/database.function.constant';
 
 describe('E2E Role Admin', () => {
@@ -72,22 +80,20 @@ describe('E2E Role Admin', () => {
         roleService = app.get(RoleService);
         permissionService = app.get(PermissionService);
 
-        const permissions: Permission[] = await permissionService.findAll(
-            {
-                code: {
-                    $in: [
-                        ENUM_AUTH_PERMISSIONS.ROLE_READ,
-                        ENUM_AUTH_PERMISSIONS.ROLE_CREATE,
-                        ENUM_AUTH_PERMISSIONS.ROLE_UPDATE,
-                        ENUM_AUTH_PERMISSIONS.ROLE_DELETE,
-                        ENUM_AUTH_PERMISSIONS.PERMISSION_READ,
-                        ENUM_AUTH_PERMISSIONS.PERMISSION_READ,
-                        ENUM_AUTH_PERMISSIONS.PERMISSION_READ,
-                        ENUM_AUTH_PERMISSIONS.PERMISSION_READ,
-                    ],
-                },
-            }
-        );
+        const permissions: Permission[] = await permissionService.findAll({
+            code: {
+                $in: [
+                    ENUM_AUTH_PERMISSIONS.ROLE_READ,
+                    ENUM_AUTH_PERMISSIONS.ROLE_CREATE,
+                    ENUM_AUTH_PERMISSIONS.ROLE_UPDATE,
+                    ENUM_AUTH_PERMISSIONS.ROLE_DELETE,
+                    ENUM_AUTH_PERMISSIONS.PERMISSION_READ,
+                    ENUM_AUTH_PERMISSIONS.PERMISSION_READ,
+                    ENUM_AUTH_PERMISSIONS.PERMISSION_READ,
+                    ENUM_AUTH_PERMISSIONS.PERMISSION_READ,
+                ],
+            },
+        });
 
         successData = {
             name: 'testRole1',
@@ -168,10 +174,7 @@ describe('E2E Role Admin', () => {
     it(`GET ${E2E_PERMISSION_ADMIN_GET_URL} Get Not Found`, async () => {
         const response = await request(app.getHttpServer())
             .get(
-                E2E_PERMISSION_ADMIN_GET_URL.replace(
-                    ':id',
-                    `${GenerateUUID()}`
-                )
+                E2E_PERMISSION_ADMIN_GET_URL.replace(':id', `${GenerateUUID()}`)
             )
             .set('Authorization', `Bearer ${accessToken}`)
             .set('x-permission-token', permissionToken);
@@ -306,12 +309,7 @@ describe('E2E Role Admin', () => {
 
     it(`PUT ${E2E_PERMISSION_ADMIN_UPDATE_URL} Update Error Request`, async () => {
         const response = await request(app.getHttpServer())
-            .put(
-                E2E_PERMISSION_ADMIN_UPDATE_URL.replace(
-                    ':id',
-                    roleUpdate.id
-                )
-            )
+            .put(E2E_PERMISSION_ADMIN_UPDATE_URL.replace(':id', roleUpdate.id))
             .send({
                 name: [231231],
             })
@@ -344,12 +342,7 @@ describe('E2E Role Admin', () => {
 
     it(`PUT ${E2E_PERMISSION_ADMIN_UPDATE_URL} Update Permission Not Found`, async () => {
         const response = await request(app.getHttpServer())
-            .put(
-                E2E_PERMISSION_ADMIN_UPDATE_URL.replace(
-                    ':id',
-                    roleUpdate.id
-                )
-            )
+            .put(E2E_PERMISSION_ADMIN_UPDATE_URL.replace(':id', roleUpdate.id))
             .send({
                 accessFor: ENUM_AUTH_ACCESS_FOR.SUPER_ADMIN,
                 permissions: [GenerateUUID()],
@@ -365,12 +358,7 @@ describe('E2E Role Admin', () => {
 
     it(`PUT ${E2E_PERMISSION_ADMIN_UPDATE_URL} Update Success`, async () => {
         const response = await request(app.getHttpServer())
-            .put(
-                E2E_PERMISSION_ADMIN_UPDATE_URL.replace(
-                    ':id',
-                    roleUpdate.id
-                )
-            )
+            .put(E2E_PERMISSION_ADMIN_UPDATE_URL.replace(':id', roleUpdate.id))
             .send(updateDataPermission)
             .set('Authorization', `Bearer ${accessToken}`)
             .set('x-permission-token', permissionToken);
@@ -398,7 +386,9 @@ describe('E2E Role Admin', () => {
 
     it(`PATCH ${E2E_PERMISSION_ADMIN_INACTIVE_URL} Inactive, success`, async () => {
         const response = await request(app.getHttpServer())
-            .patch(E2E_PERMISSION_ADMIN_INACTIVE_URL.replace(':id', roleUpdate.id))
+            .patch(
+                E2E_PERMISSION_ADMIN_INACTIVE_URL.replace(':id', roleUpdate.id)
+            )
             .set('Authorization', `Bearer ${accessToken}`)
             .set('x-permission-token', permissionToken);
 
@@ -408,7 +398,9 @@ describe('E2E Role Admin', () => {
 
     it(`PATCH ${E2E_PERMISSION_ADMIN_INACTIVE_URL} Inactive, already inactive`, async () => {
         const response = await request(app.getHttpServer())
-            .patch(E2E_PERMISSION_ADMIN_INACTIVE_URL.replace(':id', roleUpdate.id))
+            .patch(
+                E2E_PERMISSION_ADMIN_INACTIVE_URL.replace(':id', roleUpdate.id)
+            )
             .set('Authorization', `Bearer ${accessToken}`)
             .set('x-permission-token', permissionToken);
 
@@ -437,7 +429,9 @@ describe('E2E Role Admin', () => {
 
     it(`PATCH ${E2E_PERMISSION_ADMIN_ACTIVE_URL} Active, success`, async () => {
         const response = await request(app.getHttpServer())
-            .patch(E2E_PERMISSION_ADMIN_ACTIVE_URL.replace(':id', roleUpdate.id))
+            .patch(
+                E2E_PERMISSION_ADMIN_ACTIVE_URL.replace(':id', roleUpdate.id)
+            )
             .set('Authorization', `Bearer ${accessToken}`)
             .set('x-permission-token', permissionToken);
 
@@ -447,7 +441,9 @@ describe('E2E Role Admin', () => {
 
     it(`PATCH ${E2E_PERMISSION_ADMIN_ACTIVE_URL} Active, already active`, async () => {
         const response = await request(app.getHttpServer())
-            .patch(E2E_PERMISSION_ADMIN_ACTIVE_URL.replace(':id', roleUpdate.id))
+            .patch(
+                E2E_PERMISSION_ADMIN_ACTIVE_URL.replace(':id', roleUpdate.id)
+            )
             .set('Authorization', `Bearer ${accessToken}`)
             .set('x-permission-token', permissionToken);
 

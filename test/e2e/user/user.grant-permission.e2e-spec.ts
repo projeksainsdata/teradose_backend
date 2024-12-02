@@ -101,7 +101,6 @@ describe('E2E User Grant Password', () => {
         } catch (err: any) {
             console.error(err);
         }
-
     });
 
     it(`POST ${E2E_USER_GRANT_PERMISSION} Error Request`, async () => {
@@ -225,7 +224,6 @@ describe('E2E User Grant Password Payload Encryption', () => {
         } catch (err: any) {
             console.error(err);
         }
-
     });
 
     it(`POST ${E2E_USER_GRANT_PERMISSION} Success`, async () => {

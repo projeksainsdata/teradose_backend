@@ -94,7 +94,6 @@ describe('E2E User Login', () => {
         } catch (err: any) {
             console.error(err);
         }
-
     });
 
     it(`POST ${E2E_USER_LOGIN_URL} Error Request`, async () => {

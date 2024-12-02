@@ -24,7 +24,7 @@ describe('LoggerService', () => {
         action: ENUM_LOGGER_ACTION.TEST,
         description: 'test aaa',
         method: ENUM_REQUEST_METHOD.GET,
-        tags: [],
+        tags: '',
         path: '/path',
     };
 
@@ -44,7 +44,7 @@ describe('LoggerService', () => {
             test: 'bbb',
         },
         path: '/path-complete',
-        tags: [],
+        tags: '',
     };
 
     beforeEach(async () => {

@@ -48,7 +48,6 @@ describe('E2E User', () => {
 
     afterAll(async () => {
         jest.clearAllMocks();
-
     });
 
     it(`GET ${E2E_USER_INFO} Success`, async () => {

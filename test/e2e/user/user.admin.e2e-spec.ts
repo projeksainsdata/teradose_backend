@@ -124,7 +124,6 @@ describe('E2E User Admin', () => {
         } catch (err: any) {
             console.error(err);
         }
-
     });
 
     it(`GET ${E2E_USER_ADMIN_LIST_URL} List Success`, async () => {
@@ -308,7 +307,9 @@ describe('E2E User Admin', () => {
 
     it(`PATCH ${E2E_USER_ADMIN_ACTIVE_URL} Active, Not Found`, async () => {
         const response = await request(app.getHttpServer())
-            .patch(E2E_USER_ADMIN_ACTIVE_URL.replace(':id', `${GenerateUUID()}`))
+            .patch(
+                E2E_USER_ADMIN_ACTIVE_URL.replace(':id', `${GenerateUUID()}`)
+            )
             .set('Authorization', `Bearer ${accessToken}`)
             .set('x-permission-token', permissionToken);
 
@@ -342,7 +343,9 @@ describe('E2E User Admin', () => {
 
     it(`PATCH ${E2E_USER_ADMIN_BLOCKED_URL} Blocked, Not Found`, async () => {
         const response = await request(app.getHttpServer())
-            .patch(E2E_USER_ADMIN_BLOCKED_URL.replace(':id', `${GenerateUUID()}`))
+            .patch(
+                E2E_USER_ADMIN_BLOCKED_URL.replace(':id', `${GenerateUUID()}`)
+            )
             .set('Authorization', `Bearer ${accessToken}`)
             .set('x-permission-token', permissionToken);
 
@@ -364,7 +367,9 @@ describe('E2E User Admin', () => {
 
     it(`DELETE ${E2E_USER_ADMIN_DELETE_URL} Delete, Not Found`, async () => {
         const response = await request(app.getHttpServer())
-            .delete(E2E_USER_ADMIN_DELETE_URL.replace(':id', `${GenerateUUID()}`))
+            .delete(
+                E2E_USER_ADMIN_DELETE_URL.replace(':id', `${GenerateUUID()}`)
+            )
             .set('Authorization', `Bearer ${accessToken}`)
             .set('x-permission-token', permissionToken);
 

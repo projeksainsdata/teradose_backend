@@ -118,12 +118,7 @@ describe('E2E Permission Admin', () => {
 
     it(`GET ${E2E_PERMISSION_ADMIN_GET_URL} Get Not Found`, async () => {
         const response = await request(app.getHttpServer())
-            .get(
-                E2E_PERMISSION_ADMIN_GET_URL.replace(
-                    ':id',
-                    GenerateUUID()
-                )
-            )
+            .get(E2E_PERMISSION_ADMIN_GET_URL.replace(':id', GenerateUUID()))
             .set('Authorization', `Bearer ${accessToken}`)
             .set('x-permission-token', permissionToken);
 

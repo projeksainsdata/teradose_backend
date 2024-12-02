@@ -97,7 +97,6 @@ describe('E2E User Change Password', () => {
         } catch (err: any) {
             console.error(err);
         }
-
     });
 
     it(`PATCH ${E2E_USER_CHANGE_PASSWORD_URL} Error Request`, async () => {
