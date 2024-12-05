@@ -11,7 +11,10 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { categories } from '@prisma/client';
-import { AuthJwtAdminAccessProtected } from 'src/common/auth/decorators/auth.jwt.decorator';
+import {
+    AuthJwtAdminAccessProtected,
+    AuthJwtAuthorAccessProtected,
+} from 'src/common/auth/decorators/auth.jwt.decorator';
 import { ENUM_ERROR_STATUS_CODE_ERROR } from 'src/common/error/constants/error.status-code.constant';
 import {
     PaginationQuery,
@@ -137,7 +140,7 @@ export class CategoriesAdminController {
     @Response('categories.create', {
         serialization: ResponseIdSerialization,
     })
-    @AuthJwtAdminAccessProtected()
+    @AuthJwtAuthorAccessProtected()
     @Post('/')
     async create(
         @Body()

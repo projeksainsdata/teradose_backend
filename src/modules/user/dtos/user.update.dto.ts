@@ -9,11 +9,17 @@ export class UserUpdateDto extends PartialType(
 ) {
     @ApiProperty({
         description: 'string password',
-        example: `${faker.string.alphanumeric(5).toLowerCase()}${faker.string
-            .alphanumeric(5)
-            .toUpperCase()}@@!123`,
+        example: `${faker.string.alphanumeric(5).toLowerCase()}${faker.string.alphanumeric(5).toUpperCase()}@@!123`,
     })
     @IsOptional()
     @IsPasswordStrong()
-    password: string;
+    set password(value: string) {
+        if (value !== "") {
+            this._password = value;
+        }
+    }
+    get password(): string {
+        return this._password;
+    }
+    private _password: string;
 }
