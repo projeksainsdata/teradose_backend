@@ -83,6 +83,7 @@ export class CategoriesAdminController {
     @ResponsePaging('categories.list', {
         serialization: CategoriesListSerialization,
     })
+    @AuthJwtAuthorAccessProtected()
     @Get('/')
     async list(
         @PaginationQuery(
@@ -128,6 +129,7 @@ export class CategoriesAdminController {
         serialization: CategoryGetSerialization,
     })
     @CategoriesGetGuard()
+    @AuthJwtAuthorAccessProtected()
     @RequestParamGuard(CategoriesRequestDto)
     @Get('/:categories')
     async get(
@@ -181,7 +183,7 @@ export class CategoriesAdminController {
     })
     @CategoriesUpdateGuard()
     @RequestParamGuard(CategoriesRequestDto)
-    @AuthJwtAdminAccessProtected()
+    @AuthJwtAuthorAccessProtected()
     @Put('/:categories')
     async update(
         @GetCategories() categories: categories,
@@ -206,7 +208,7 @@ export class CategoriesAdminController {
     @Response('categories.delete')
     @CategoriesDeleteGuard()
     @RequestParamGuard(CategoriesRequestDto)
-    @AuthJwtAdminAccessProtected()
+    @AuthJwtAuthorAccessProtected()
     @Delete('/:categories')
     async delete(@GetCategories() categories: categories): Promise<void> {
         try {
