@@ -13,13 +13,5 @@ export class UserUpdateDto extends PartialType(
     })
     @IsOptional()
     @IsPasswordStrong()
-    set password(value: string) {
-        if (value !== "") {
-            this._password = value;
-        }
-    }
-    get password(): string {
-        return this._password;
-    }
-    private _password: string;
+    password?: string;
 }

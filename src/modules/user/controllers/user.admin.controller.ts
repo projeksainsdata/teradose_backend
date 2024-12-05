@@ -221,12 +221,23 @@ export class UserAdminController {
         @Body()
         body: UserUpdateDto
     ): Promise<IResponse> {
-        try {
-            if (body.password) {
-                const password: IAuthPassword =
-                    await this.authService.createPassword(body.password);
-                body.password = password.passwordHash;
+        if (body.role) {
+            const checkRole = await this.roleService.exist(body.role);
+            if (!checkRole) {
+                throw new NotFoundException({
+                    statusCode:
+                        ENUM_ROLE_STATUS_CODE_ERROR.ROLE_NOT_FOUND_ERROR,
+                    message: 'role.error.notFound',
+                });
             }
+        }
+        if (body.password) {
+            const password: IAuthPassword =
+                await this.authService.createPassword(body.password);
+            body.password = password.passwordHash;
+        }
+
+        try {
             await this.userService.update(user.id, body);
         } catch (err: any) {
             throw new InternalServerErrorException({
