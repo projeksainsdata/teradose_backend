@@ -23,7 +23,7 @@ export default registerAs(
             host: process.env.HTTP_HOST ?? 'localhost',
             port: process.env.HTTP_PORT
                 ? Number.parseInt(process.env.HTTP_PORT)
-                : 3000,
+                : 3001,
         },
 
         jobEnable: process.env.JOB_ENABLE === 'true' || false,

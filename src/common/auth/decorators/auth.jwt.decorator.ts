@@ -46,7 +46,10 @@ export function AuthJwtAdminAccessProtected(): MethodDecorator {
 export function AuthJwtAuthorAccessProtected(): MethodDecorator {
     return applyDecorators(
         UseGuards(AuthJwtAccessGuard, AuthPayloadAccessForGuard),
-        SetMetadata(AUTH_ACCESS_FOR_META_KEY, [ENUM_AUTH_ACCESS_FOR.AUTHOR])
+        SetMetadata(AUTH_ACCESS_FOR_META_KEY, [
+            ENUM_AUTH_ACCESS_FOR.AUTHOR,
+            ENUM_AUTH_ACCESS_FOR.SUPER_ADMIN,
+        ])
     );
 }
 

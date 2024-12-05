@@ -45,7 +45,7 @@ async function bootstrap() {
     await swaggerInit(app);
 
     // Listen
-    await app.listen(port, host);
+    await app.listen(port, "0.0.0.0");
 
     logger.log(`==========================================================`);
 

@@ -60,5 +60,5 @@ export class UserCreateDto {
     })
     @IsNotEmpty()
     @IsPasswordStrong()
-    readonly password: string;
+    password: string;
 }

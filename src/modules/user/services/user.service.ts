@@ -14,6 +14,7 @@ import { IPermissionGroup } from '../../permission/interfaces/permission.interfa
 import { PrismaService } from 'src/common/databases/services/database.service';
 import { IUser } from '../interfaces/user.interface';
 import { Permission, Prisma, User } from '@prisma/client';
+import { UserUpdateDto } from '../dtos/user.update.dto';
 
 @Injectable()
 export class UserService implements IUserService {
@@ -117,6 +118,19 @@ export class UserService implements IUserService {
     async delete(id: string): Promise<User> {
         return this.prismaService.user.delete({
             where: { id },
+        });
+    }
+
+    async update(
+        id: string,
+        data: UserUpdateDto,
+        
+        options?: Prisma.UserUpdateArgs
+    ): Promise<User> {
+        return this.prismaService.user.update({
+            where: { id },
+            data,
+            ...options,
         });
     }
 
@@ -230,11 +244,7 @@ export class UserService implements IUserService {
         const users = await this.prismaService.user.findUnique({
             where: { id },
             include: {
-                roles: {
-                    include: {
-                        permissions: true,
-                    },
-                },
+                roles: true,
             },
         });
         return {

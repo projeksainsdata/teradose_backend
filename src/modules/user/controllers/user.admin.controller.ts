@@ -68,6 +68,7 @@ import {
 import { IAuthPassword } from '../../../common/auth/interfaces/auth.interface';
 import { User } from '@prisma/client';
 import { IUser } from '../interfaces/user.interface';
+import { UserUpdateDto } from '../dtos/user.update.dto';
 
 @ApiTags('modules.admin.user')
 @Controller({
@@ -218,10 +219,15 @@ export class UserAdminController {
     async update(
         @GetUser() user: User,
         @Body()
-        body: UserUpdateNameDto
+        body: UserUpdateDto
     ): Promise<IResponse> {
         try {
-            await this.userService.updateName(user.id, body);
+            if (body.password) {
+                const password: IAuthPassword =
+                    await this.authService.createPassword(body.password);
+                body.password = password.passwordHash;
+            }
+            await this.userService.update(user.id, body);
         } catch (err: any) {
             throw new InternalServerErrorException({
                 statusCode: ENUM_ERROR_STATUS_CODE_ERROR.ERROR_UNKNOWN,

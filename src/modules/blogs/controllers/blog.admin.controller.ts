@@ -14,7 +14,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { Blogs, ENUM_STATUS } from '@prisma/client';
 import {
-    AuthJwtAdminAccessProtected,
+    AuthJwtAuthorAccessProtected,
     AuthJwtPayload,
 } from 'src/common/auth/decorators/auth.jwt.decorator';
 import { PaginationService } from 'src/common/pagination/services/pagination.service';
@@ -64,7 +64,11 @@ import { ENUM_BLOG_STATUS_CODE_ERROR } from '../constants/blog.status-code.const
 import { ENUM_ERROR_STATUS_CODE_ERROR } from 'src/common/error/constants/error.status-code.constant';
 import { HelperStringService } from 'src/common/helper/services/helper.string.service';
 import { BlogCategoriesExist } from '../decorators/blog.categories.decorator';
-import { BlogGetGuard } from '../decorators/blog.admin.decorator';
+import {
+    BlogDeleteGuard,
+    BlogGetGuard,
+    BlogUpdateGuard,
+} from '../decorators/blog.admin.decorator';
 import { BlogUpdateStatusDto } from '../dtos/blog.update-status.dto';
 
 @ApiTags('modules.admin.blog')
@@ -83,7 +87,7 @@ export class BlogAdminController {
     @ResponsePaging('blog.list', {
         serialization: BlogListSerialization,
     })
-    @AuthJwtAdminAccessProtected()
+    @AuthJwtAuthorAccessProtected()
     @Get('/')
     async list(
         @PaginationQuery(
@@ -118,7 +122,7 @@ export class BlogAdminController {
             skip: _offset,
             take: _limit,
             orderBy: _order,
-            include: {
+            select: {
                 categories: {
                     select: {
                         id: true,
@@ -132,6 +136,12 @@ export class BlogAdminController {
                         fullName: true,
                     },
                 },
+                id: true,
+                slug: true,
+                createdAt: true,
+                description: true,
+                thumbnail: true,
+                title: true,
             },
         });
 
@@ -146,7 +156,7 @@ export class BlogAdminController {
 
     @BlogGetDoc()
     @Response('blog.get', { serialization: BlogGetSerialization })
-    @AuthJwtAdminAccessProtected()
+    @AuthJwtAuthorAccessProtected()
     @BlogGetGuard()
     @RequestParamGuard(BlogRequestIdDto)
     @Get('/:blogs')
@@ -171,7 +181,7 @@ export class BlogAdminController {
 
     @BlogCreateDoc()
     @Response('blog.create')
-    @AuthJwtAdminAccessProtected()
+    @AuthJwtAuthorAccessProtected()
     @BlogCategoriesExist()
     @Post('/')
     async create(
@@ -204,8 +214,9 @@ export class BlogAdminController {
     @Response('blog.update', {
         serialization: BlogGetSerialization,
     })
-    @AuthJwtAdminAccessProtected()
-    @BlogGetGuard()
+    @AuthJwtAuthorAccessProtected()
+    @BlogCategoriesExist(false)
+    @BlogUpdateGuard()
     @RequestParamGuard(BlogRequestIdDto)
     @Put('/:blogs')
     async update(
@@ -228,7 +239,7 @@ export class BlogAdminController {
     @Response('blog.updateStatus', {
         serialization: BlogGetSerialization,
     })
-    @AuthJwtAdminAccessProtected()
+    @AuthJwtAuthorAccessProtected()
     @BlogGetGuard()
     @RequestParamGuard(BlogRequestIdDto)
     @Patch('/:blogs/status')
@@ -250,8 +261,8 @@ export class BlogAdminController {
 
     @BlogDeleteDoc()
     @Response('blog.delete')
-    @AuthJwtAdminAccessProtected()
-    @BlogGetGuard()
+    @AuthJwtAuthorAccessProtected()
+    @BlogDeleteGuard()
     @RequestParamGuard(BlogRequestIdDto)
     @Delete('/:blogs')
     async delete(@GetBlog() blog: Blogs): Promise<void> {
