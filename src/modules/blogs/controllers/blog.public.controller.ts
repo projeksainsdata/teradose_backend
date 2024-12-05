@@ -85,7 +85,7 @@ export class BlogsPublicController {
             skip: _offset,
             take: _limit,
             orderBy: _order,
-            include: {
+            select: {
                 categories: {
                     select: {
                         id: true,
@@ -99,6 +99,12 @@ export class BlogsPublicController {
                         fullName: true,
                     },
                 },
+                id: true,
+                slug: true,
+                createdAt: true,
+                description: true,
+                thumbnail: true,
+                title: true,
             },
         });
 
@@ -164,8 +170,26 @@ export class BlogsPublicController {
             skip: _offset,
             take: _limit,
             orderBy: _order,
-            include: {
-                categories: true,
+            select: {
+                categories: {
+                    select: {
+                        id: true,
+                        name: true,
+                        slug: true,
+                    },
+                },
+                user: {
+                    select: {
+                        id: true,
+                        fullName: true,
+                    },
+                },
+                id: true,
+                slug: true,
+                createdAt: true,
+                description: true,
+                thumbnail: true,
+                title: true,
             },
         });
 

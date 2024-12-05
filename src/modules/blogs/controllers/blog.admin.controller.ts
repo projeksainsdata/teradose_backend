@@ -142,6 +142,7 @@ export class BlogAdminController {
                 description: true,
                 thumbnail: true,
                 title: true,
+                status: true,
             },
         });
 
