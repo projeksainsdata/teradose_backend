@@ -1,8 +1,6 @@
 // src/modules/repository/dtos/repositories.base.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
-import { ENUM_STATUS } from '@prisma/client';
-import { Transform } from 'class-transformer';
-import { IsString, IsOptional, IsEnum, MaxLength } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class RepositoryBaseDto {
     @ApiProperty({
@@ -11,7 +9,6 @@ export class RepositoryBaseDto {
         required: true,
     })
     @IsString()
-    @MaxLength(255)
     readonly title: string;
 
     @ApiProperty({

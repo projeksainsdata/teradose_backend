@@ -4,7 +4,6 @@ import { Type } from 'class-transformer';
 import {
     IsString,
     IsNotEmpty,
-    MaxLength,
     IsOptional,
     IsEnum,
 } from 'class-validator';
@@ -18,7 +17,6 @@ export class CategoriesCreateDto {
     })
     @IsString()
     @IsNotEmpty()
-    @MaxLength(100)
     @Type(() => String)
     readonly name: string;
 

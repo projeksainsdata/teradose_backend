@@ -1,6 +1,6 @@
 // src/modules/repository/dtos/repositories.create.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsOptional, MaxLength } from 'class-validator';
+import { IsString, IsOptional } from 'class-validator';
 import { RepositoryBaseDto } from './repositories.base.dto';
 
 export class RepositoryCreateDto extends RepositoryBaseDto {
@@ -11,7 +11,6 @@ export class RepositoryCreateDto extends RepositoryBaseDto {
     })
     @IsOptional()
     @IsString()
-    @MaxLength(255)
     readonly indication?: string;
 
     @ApiProperty({
@@ -21,7 +20,6 @@ export class RepositoryCreateDto extends RepositoryBaseDto {
     })
     @IsOptional()
     @IsString()
-    @MaxLength(255)
     readonly composition?: string;
 
     @ApiProperty({
@@ -31,7 +29,6 @@ export class RepositoryCreateDto extends RepositoryBaseDto {
     })
     @IsOptional()
     @IsString()
-    @MaxLength(255)
     readonly dose?: string;
 
     @ApiProperty({
@@ -41,7 +38,6 @@ export class RepositoryCreateDto extends RepositoryBaseDto {
     })
     @IsOptional()
     @IsString()
-    @MaxLength(255)
     readonly usage_guideline?: string;
 
     //slug is generated from title
@@ -52,7 +48,6 @@ export class RepositoryCreateDto extends RepositoryBaseDto {
     })
     @IsOptional()
     @IsString()
-    @MaxLength(255)
     slug?: string;
 
     @ApiProperty({
@@ -62,7 +57,6 @@ export class RepositoryCreateDto extends RepositoryBaseDto {
     })
     @IsOptional()
     @IsString()
-    @MaxLength(255)
     readonly attention?: string;
 
     @ApiProperty({
@@ -72,7 +66,6 @@ export class RepositoryCreateDto extends RepositoryBaseDto {
     })
     @IsOptional()
     @IsString()
-    @MaxLength(255)
     readonly contraindication?: string;
 
     @ApiProperty({
@@ -82,7 +75,6 @@ export class RepositoryCreateDto extends RepositoryBaseDto {
     })
     @IsOptional()
     @IsString()
-    @MaxLength(255)
     readonly side_effect?: string;
 
     @ApiProperty({
@@ -92,6 +84,5 @@ export class RepositoryCreateDto extends RepositoryBaseDto {
     })
     @IsOptional()
     @IsString()
-    @MaxLength(255)
     readonly product_categories?: string;
 }

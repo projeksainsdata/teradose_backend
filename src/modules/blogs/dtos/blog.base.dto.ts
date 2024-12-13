@@ -1,6 +1,6 @@
 // src/modules/Blog/dtos/repositories.base.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsUUID, MaxLength } from 'class-validator';
+import { IsString, IsUUID } from 'class-validator';
 import { ENUM_BLOG_STATUS_LIST } from '../constants/blog.enum.constant';
 import { ENUM_STATUS } from '@prisma/client';
 import { faker } from '@faker-js/faker';
@@ -12,7 +12,6 @@ export class BlogBaseDto {
         required: true,
     })
     @IsString()
-    @MaxLength(255)
     readonly title: string;
 
     @ApiProperty({
